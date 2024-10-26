@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Path finders</title>
+	<link rel="stylesheet" href="/css/master.min.css">
+	<script src="/js/main.min.js" charset="utf-8"></script>
+	<script src="/js/mazeGeneration.min.js" charset="utf-8"></script>
+	<script src="/js/solvers.min.js" charset="utf-8"></script>
+</head>
+<body>
+	<div id="content">
+		<header>
+			<h1>Path finders</h1>
+			<div id="btns">
+				<button class="btn" id="stop">Stop</button>
+				<button class="btn" id="reset">Reset</button>
+			</div>
+		</header>
+		<div id="grid"></div>
+		<nav>
+			<hr>
+			<h4 class="my-2 w-100 text-center">Info</h4>
+			<div id="info"></div>
+			<hr>
+			<div id="settings">
+				<h4 class="my-2 w-100 text-center">Speed</h4>
+				<input type="range" id="speed" min="0" max="100" value="90" step="1" class="w-70">
+			</div>
+			<hr>
+			<div id="mazeGeneration">
+				<h4 class="my-2 w-100 text-center">Maze generation</h4>
+				<select id="mazeAlgorithm" class="mb-3">
+					<option value="backtracker" data-desc="An algorithm, that creates paths by randomly chosing directions and if it reaches an end, it backtracks.">Recursive backtracker</option>
+					<option value="backtrackerMulti" data-desc="An algorithm, that creates paths by randomly chosing directions and if it reaches an end, it backtracks. This algorithms also has a chance of creating another instance of itself (split) leading to more diverse paths.">Recursive backtracker with splits</option>
+					<option value="huntAndKill" data-desc="An algorithm, that creates paths by randomly chosing directions and if it reaches an end, it looks from top to bottom until it finds an available field.">Hunt & Kill</option>
+					<option value="recursiveDivision" data-desc="An algorithm, that separates grid recursively, creating walls with randomly placed pass-throughts.">Recursive division</option>
+				</select>
+				<p id="mazeGeneratorDescription" class="text-center w-90 mb-2 description"></p>
+				<button class="btn" id="generateMaze">Generate!</button>
+			</div>
+			<hr>
+			<div id="solving">
+				<h4 class="my-2 w-100 text-center">Solving</h4>
+				<div class="d-flex mb-2">
+					<select id="solveAlgorithm">
+						<option value="dijkstra" data-heuretics="false" data-desc="Dijkstra is an algorithm that selects next fields based on their total path distance from start. This algorithms isn't very effective, but it finds the definite shortest paths.">Dijkstra</option>
+						<option value="A" data-heuretics="true" data-desc="A* is an algorithm that selects next fields based on heuritics. This algorithm is more effective, but may find a bit longer paths than Dijkstra's algorithm.">A*</option>
+					</select>
+					<select id="heuritics">
+						<option value="distance" data-desc="Distance heuritics uses distance of a field from the end. This check the least amount of fields, but it may produce longer paths.">Distance heuritics</option>
+						<option value="distanceAndLength" data-desc="Combined heuritics uses a distance of a field from the end and total path length. This produces shorter paths, while checking more fields.">Combined heuritics</option>
+					</select>
+				</div>
+				<p id="solveAlgorithmDescription" class="text-center w-90 mb-2 description"></p>
+				<p id="heuriticsDescription" class="text-center w-90 mb-2 description"></p>
+				<button class="btn" id="solve">Solve</button>
+				<button class="btn" id="solveFast">Solve instant</button>
+			</div>
+			<hr>
+		</nav>
+	</div>
+</body>
+</html>
