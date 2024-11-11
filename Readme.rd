@@ -10,3 +10,6 @@ Please replace these algorithms with your own implementations, ensuring that eac
 Missing : 
 1) Folder Representing Each Algorithm Frontier
 2) Chart Showing the Difference in Execution Time for Each Algorithm
+3) Requirments.txt
+4) Report
+5) Video
