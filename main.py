@@ -1,13 +1,25 @@
 import pygame
 import sys
-import cProfile 
 import pandas as pd
+import time 
+import random 
 
 from environment import Cell, generate_maze
 from Searching_Algorithms import Uninformed_Search, Local_Search, Heuristic_Search
 from collections import deque
 
-ExcutionTime = pd.DataFrame(columns=["BFS" , "DFS" , "UCS" ,"IDS","Greedy BFS" ,"A*","Hill Climbing Stairs" ,"Simulated Annealing" ,"Genetic Algos"])
+compareAlgos = {
+    "BFS" : [0], 
+    "DFS" : [0], 
+    "UCS" : [0],
+    "IDS" : [0],
+    "Greedy BFS" :[0] ,
+    "A*" :[0],
+    "Hill Climbing Stairs":[0],
+    "Simulated Annealing":[0],
+    "Genetic Algos":[0]
+}
+
 DIRECTIONS = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 WIDTH, HEIGHT = 1300, 600
 CELL_SIZE = 20
@@ -112,31 +124,31 @@ def main():
                     selected_algorithm = 'Genetic Algos'
             
         if selected_algorithm == 'BFS':
-            path, frontier, step_count = Uninformed_Search.bfs(start, goal, grid)
+            path, frontier, step_count , timeTaken = Uninformed_Search.bfs(start, goal, grid)
             draw_path(path)
         elif selected_algorithm == 'DFS':
-            path, frontier, step_count = Uninformed_Search.dfs(start, goal, grid)
+            path, frontier, step_count, timeTaken = Uninformed_Search.dfs(start, goal, grid)
             draw_path(path)
         elif selected_algorithm == 'A*':
-            path, frontier, step_count = Heuristic_Search.a_star(start, goal, grid)
+            path, frontier, step_count , timeTaken= Heuristic_Search.a_star(start, goal, grid)
             draw_path(path)
         elif selected_algorithm == 'UCS':
-            path, frontier, step_count = Uninformed_Search.ucs(start, goal, grid)
+            path, frontier, step_count, timeTaken = Uninformed_Search.ucs(start, goal, grid)
             draw_path(path)
         elif selected_algorithm == 'IDS':
-            path, frontier, step_count = Uninformed_Search.ids(start, goal, grid)
+            path, frontier, step_count, timeTaken = Uninformed_Search.ids(start, goal, grid)
             draw_path(path)
         elif selected_algorithm == 'Greedy BFS':
-            path, frontier, step_count = Heuristic_Search.greedy_bfs(start, goal, grid)
+            path, frontier, step_count, timeTaken = Heuristic_Search.greedy_bfs(start, goal, grid)
             draw_path(path)
         elif selected_algorithm == 'Hill Climbing':
-            path, frontier, step_count = Local_Search.hill_climbing(start, goal, grid)
+            path, frontier, step_count, timeTaken = Local_Search.hill_climbing(start, goal, grid)
             draw_path(path)
         elif selected_algorithm == 'Simulated Annealing':
-            path, frontier, step_count = Local_Search.simulated_annealing(start, goal, grid)
+            path, frontier, step_count, timeTaken = Local_Search.simulated_annealing(start, goal, grid)
             draw_path(path)
         elif selected_algorithm == 'Genetic Algos':
-            path, frontier, step_count = Local_Search.genetic_algorithm(start, goal, grid)
+            path, frontier, step_count, timeTaken = Local_Search.genetic_algorithm(start, goal, grid)
             draw_path(path)
 
         font = pygame.font.Font(None, 30)
