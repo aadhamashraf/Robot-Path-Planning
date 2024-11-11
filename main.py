@@ -1,9 +1,13 @@
 import pygame
 import sys
+import cProfile 
+import pandas as pd
+
 from environment import Cell, generate_maze
 from Searching_Algorithms import Uninformed_Search, Local_Search, Heuristic_Search
 from collections import deque
 
+ExcutionTime = pd.DataFrame(columns=["BFS" , "DFS" , "UCS" ,"IDS","Greedy BFS" ,"A*","Hill Climbing Stairs" ,"Simulated Annealing" ,"Genetic Algos"])
 DIRECTIONS = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 WIDTH, HEIGHT = 1300, 600
 CELL_SIZE = 20
@@ -107,11 +111,6 @@ def main():
                 elif button_x <= x <= button_x + button_width and button_y + 8 * button_gap <= y <= button_y + 8 * button_gap + button_height:
                     selected_algorithm = 'Genetic Algos'
             
-                # Handle other interactions like exporting frontier
-                elif button_x + button_width + 10 <= x <= button_x + 2 * button_width + 10 and button_y + 7 * button_gap <= y <= button_y + 7 * button_gap + button_height:
-                    export_frontier(frontier)
-
-        # Algorithm execution
         if selected_algorithm == 'BFS':
             path, frontier, step_count = Uninformed_Search.bfs(start, goal, grid)
             draw_path(path)
