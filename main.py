@@ -1,7 +1,7 @@
 import pygame
 import sys
 from environment import Cell, generate_maze
-from Searching_Algorithms import Uninformed_Search , Local_Search ,Heuristic_Search
+from Searching_Algorithms import Uninformed_Search, Local_Search, Heuristic_Search
 from collections import deque
 
 DIRECTIONS = [(-1, 0), (1, 0), (0, -1), (0, 1)]
@@ -71,16 +71,18 @@ def main():
             for cell in row:
                 cell.draw(screen)
 
+        # Draw buttons for each algorithm
         draw_button(screen, 'BFS', button_x, button_y, button_width, button_height)
         draw_button(screen, 'DFS', button_x, button_y + button_gap, button_width, button_height)
-        draw_button(screen, 'A*', button_x, button_y + 2 * button_gap, button_width, button_height)
-        draw_button(screen, 'Greedy BFS', button_x, button_y + 3 * button_gap, button_width, button_height)
-        draw_button(screen, 'Hill Climbing', button_x, button_y + 4 * button_gap, button_width, button_height)
-        draw_button(screen, 'Simulated Annealing', button_x, button_y + 5 * button_gap, button_width, button_height)
-        draw_button(screen, 'Genetic Algorithms', button_x, button_y + 6 * button_gap, button_width, button_height)
-        draw_button(screen, 'Export Frontier', button_x, button_y + 7 * button_gap, button_width, button_height)
-        draw_button(screen, 'Show Tree', button_x, button_y + 8 * button_gap, button_width, button_height)
+        draw_button(screen, 'UCS', button_x, button_y + 2 * button_gap, button_width, button_height)
+        draw_button(screen, 'IDS', button_x, button_y + 3 * button_gap, button_width, button_height)
+        draw_button(screen, 'Greedy BFS', button_x, button_y + 4 * button_gap, button_width, button_height)
+        draw_button(screen, 'A*', button_x, button_y + 5 * button_gap, button_width, button_height)
+        draw_button(screen, 'Hill Climbing', button_x, button_y + 6 * button_gap, button_width, button_height)
+        draw_button(screen, 'Simulated Annealing', button_x, button_y + 7 * button_gap, button_width, button_height)
+        draw_button(screen, 'Genetic Algos', button_x, button_y + 8 * button_gap, button_width, button_height)
 
+        # Event handling
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -91,16 +93,25 @@ def main():
                 elif button_x <= x <= button_x + button_width and button_y + button_gap <= y <= button_y + button_gap + button_height:
                     selected_algorithm = 'DFS'
                 elif button_x <= x <= button_x + button_width and button_y + 2 * button_gap <= y <= button_y + 2 * button_gap + button_height:
+                    selected_algorithm = 'UCS'
+                elif button_x <= x <= button_x + button_width and button_y + 3 * button_gap <= y <= button_y + 3 * button_gap + button_height:
+                    selected_algorithm = 'IDS'
+                elif button_x <= x <= button_x + button_width and button_y + 4 * button_gap <= y <= button_y + 4 * button_gap + button_height:
+                    selected_algorithm = 'Greedy BFS'
+                elif button_x <= x <= button_x + button_width and button_y + 5 * button_gap <= y <= button_y + 5 * button_gap + button_height:
                     selected_algorithm = 'A*'
+                elif button_x <= x <= button_x + button_width and button_y + 6 * button_gap <= y <= button_y + 6 * button_gap + button_height:
+                    selected_algorithm = 'Hill Climbing'
+                elif button_x <= x <= button_x + button_width and button_y + 7 * button_gap <= y <= button_y + 7 * button_gap + button_height:
+                    selected_algorithm = 'Simulated Annealing'
+                elif button_x <= x <= button_x + button_width and button_y + 8 * button_gap <= y <= button_y + 8 * button_gap + button_height:
+                    selected_algorithm = 'Genetic Algos'
             
-                # Continue the rest of algorithms the same way 
-
+                # Handle other interactions like exporting frontier
                 elif button_x + button_width + 10 <= x <= button_x + 2 * button_width + 10 and button_y + 7 * button_gap <= y <= button_y + 7 * button_gap + button_height:
                     export_frontier(frontier)
-                elif button_x <= x <= button_x + button_width and button_y + 8 * button_gap <= y <= button_y + 8 * button_gap + button_height:
-                    # Still Trying to Search How to Draw The Search Tree using Turtle
-                    pass 
 
+        # Algorithm execution
         if selected_algorithm == 'BFS':
             path, frontier, step_count = Uninformed_Search.bfs(start, goal, grid)
             draw_path(path)
@@ -110,8 +121,24 @@ def main():
         elif selected_algorithm == 'A*':
             path, frontier, step_count = Heuristic_Search.a_star(start, goal, grid)
             draw_path(path)
-
-        """Coninue the rest of algorithms the same way"""
+        elif selected_algorithm == 'UCS':
+            path, frontier, step_count = Uninformed_Search.ucs(start, goal, grid)
+            draw_path(path)
+        elif selected_algorithm == 'IDS':
+            path, frontier, step_count = Uninformed_Search.ids(start, goal, grid)
+            draw_path(path)
+        elif selected_algorithm == 'Greedy BFS':
+            path, frontier, step_count = Heuristic_Search.greedy_bfs(start, goal, grid)
+            draw_path(path)
+        elif selected_algorithm == 'Hill Climbing':
+            path, frontier, step_count = Local_Search.hill_climbing(start, goal, grid)
+            draw_path(path)
+        elif selected_algorithm == 'Simulated Annealing':
+            path, frontier, step_count = Local_Search.simulated_annealing(start, goal, grid)
+            draw_path(path)
+        elif selected_algorithm == 'Genetic Algos':
+            path, frontier, step_count = Local_Search.genetic_algorithm(start, goal, grid)
+            draw_path(path)
 
         font = pygame.font.Font(None, 30)
         text = font.render(f"Steps: {step_count}", True, BLACK)
