@@ -1,8 +1,7 @@
-import pygame
-import random
-
-CELL_SIZE = 20
-DIRECTIONS = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+from main import pygame
+from main import random 
+from main import CELL_SIZE
+from main import DIRECTIONS
 
 class Cell:
     def __init__(self, x, y):
@@ -21,6 +20,7 @@ class Cell:
             pygame.draw.line(screen, color, (x, y + CELL_SIZE), (x + CELL_SIZE, y + CELL_SIZE), 2)
         if self.walls[3]:  
             pygame.draw.line(screen, color, (x, y), (x, y + CELL_SIZE), 2)
+
 
 def generate_maze(grid, start_cell):
     stack = [start_cell]
