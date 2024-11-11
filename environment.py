@@ -1,7 +1,8 @@
-from main import pygame
-from main import random 
-from main import CELL_SIZE
-from main import DIRECTIONS
+import pygame
+import random
+CELL_SIZE = 20
+DIRECTIONS = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
 
 class Cell:
     def __init__(self, x, y):
@@ -12,13 +13,15 @@ class Cell:
 
     def draw(self, screen, color=(0, 0, 0)):
         x, y = self.x * CELL_SIZE, self.y * CELL_SIZE
-        if self.walls[0]:  
+        if self.walls[0]:
             pygame.draw.line(screen, color, (x, y), (x + CELL_SIZE, y), 2)
-        if self.walls[1]:  
-            pygame.draw.line(screen, color, (x + CELL_SIZE, y), (x + CELL_SIZE, y + CELL_SIZE), 2)
-        if self.walls[2]:  
-            pygame.draw.line(screen, color, (x, y + CELL_SIZE), (x + CELL_SIZE, y + CELL_SIZE), 2)
-        if self.walls[3]:  
+        if self.walls[1]:
+            pygame.draw.line(screen, color, (x + CELL_SIZE, y),
+                             (x + CELL_SIZE, y + CELL_SIZE), 2)
+        if self.walls[2]:
+            pygame.draw.line(screen, color, (x, y + CELL_SIZE),
+                             (x + CELL_SIZE, y + CELL_SIZE), 2)
+        if self.walls[3]:
             pygame.draw.line(screen, color, (x, y), (x, y + CELL_SIZE), 2)
 
 

@@ -1,11 +1,13 @@
-from main import heapq
-from main import DIRECTIONS
-from main import time 
+import time
+import heapq
+DIRECTIONS = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
 
 '''Greedy Best-First Search'''
 
 '''A*'''
+
+
 def a_star(start, goal, grid):
     startTime = time.time()
     open_set = []
@@ -41,4 +43,4 @@ def a_star(start, goal, grid):
         path.append(current)
         current = parent[current]
     endTime = time.time()
-    return path[::-1], frontier, steps , endTime-startTime
+    return path[::-1], frontier, steps, endTime-startTime
