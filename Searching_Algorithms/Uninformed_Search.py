@@ -1,8 +1,10 @@
 from main import DIRECTIONS
 from main import deque
+from main import time
 
 """ BFS Algorithm """
 def bfs(start, goal, grid):
+    startTime = time.time()
     queue = deque([start])
     parent = {start: None}
     frontier = set()
@@ -24,10 +26,12 @@ def bfs(start, goal, grid):
     while current != start:
         path.append(current)
         current = parent[current]
-    return path[::-1], frontier, steps
+    endTime = time.time()
+    return path[::-1], frontier, steps , endTime-startTime
 
 """ DFS Algorithm """
 def dfs(start, goal, grid):
+    startTime = time.time()
     stack = [start]
     parent = {start: None}
     frontier = set()
@@ -51,7 +55,8 @@ def dfs(start, goal, grid):
     while current != start:
         path.append(current)
         current = parent[current]
-    return path[::-1], frontier, steps 
+    endTime = time.time()
+    return path[::-1], frontier, steps , endTime-startTime
 
 """ UCS Algorithm """
 
