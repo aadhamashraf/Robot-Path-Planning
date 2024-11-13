@@ -12,15 +12,15 @@ plt.style.use('dark_background')
 
 compareAlgos = {
     # [Time]
-    "BFS" : [], 
-    "DFS" : [], 
-    "UCS" : [],
-    "IDS" : [],
-    "Greedy BFS" :[] ,
-    "A*" :[],
-    "Hill Climbing Stairs":[],
-    "Simulated Annealing":[],
-    "Genetic Algos":[]
+    "BFS" :0, 
+    "DFS" : 0, 
+    "UCS" : 0,
+    "IDS" : 0,
+    "Greedy BFS" :0 ,
+    "A Star" :0,
+    "Hill Climbing Stairs":0,
+    "Simulated Annealing":0,
+    "Genetic Algos":0
 }
 
 DIRECTIONS = [(-1, 0), (1, 0), (0, -1), (0, 1)]
@@ -67,11 +67,14 @@ def draw_path(path):
     for node in path:
         pygame.draw.rect(screen, GREEN, (node[0] * CELL_SIZE, node[1] * CELL_SIZE, CELL_SIZE, CELL_SIZE))
 
-def showDifferences_ExcutionTime(compareAlgos) :
-    plt.bar(compareAlgos.index , compareAlgos.values , marker = 'o' , linestyle = "-")
-    plt.xlabel("Searching Algorithm")
-    plt.xticks(rotation = 90)
-    plt.ylabel ("Excution Time")
+def showDifferences_ExecutionTime(compareAlgos):
+    sorted_compareAlgos = dict(sorted(compareAlgos.items(), key=lambda item: item[1]))
+    
+    plt.figure(figsize=(10, 10))
+    plt.barh(list(sorted_compareAlgos.keys()), list(sorted_compareAlgos.values()))
+    plt.title("Searching Algorithms Execution Time")
+    plt.xlabel("Execution Time")
+    plt.ylabel("Searching Algorithm")
     plt.grid(True)
     plt.show()
     
@@ -109,7 +112,7 @@ def main():
         draw_button(screen, 'UCS', button_x, button_y + 2 * button_gap, button_width, button_height)
         draw_button(screen, 'IDS', button_x, button_y + 3 * button_gap, button_width, button_height)
         draw_button(screen, 'Greedy BFS', button_x, button_y + 4 * button_gap, button_width, button_height)
-        draw_button(screen, 'A*', button_x, button_y + 5 * button_gap, button_width, button_height)
+        draw_button(screen, 'A Star', button_x, button_y + 5 * button_gap, button_width, button_height)
         draw_button(screen, 'Hill Climbing', button_x, button_y + 6 * button_gap, button_width, button_height)
         draw_button(screen, 'Simulated Annealing', button_x, button_y + 7 * button_gap, button_width, button_height)
         draw_button(screen, 'Genetic Algos', button_x, button_y + 8 * button_gap, button_width, button_height)
@@ -132,7 +135,7 @@ def main():
                 elif button_x <= x <= button_x + button_width and button_y + 4 * button_gap <= y <= button_y + 4 * button_gap + button_height:
                     selected_algorithm = 'Greedy BFS'
                 elif button_x <= x <= button_x + button_width and button_y + 5 * button_gap <= y <= button_y + 5 * button_gap + button_height:
-                    selected_algorithm = 'A*'
+                    selected_algorithm = 'A Star'
                 elif button_x <= x <= button_x + button_width and button_y + 6 * button_gap <= y <= button_y + 6 * button_gap + button_height:
                     selected_algorithm = 'Hill Climbing'
                 elif button_x <= x <= button_x + button_width and button_y + 7 * button_gap <= y <= button_y + 7 * button_gap + button_height:
@@ -140,66 +143,66 @@ def main():
                 elif button_x <= x <= button_x + button_width and button_y + 8 * button_gap <= y <= button_y + 8 * button_gap + button_height:
                     selected_algorithm = 'Genetic Algos'
                 elif button_x <= x <= button_x + button_width and button_y + 9 * button_gap <= y <= button_y + 9 * button_gap + button_height:
-                    showDifferences_ExcutionTime(compareAlgos)
+                    showDifferences_ExecutionTime(compareAlgos)
 
         if selected_algorithm == 'BFS':
             path, frontier, step_count , timeTaken = Uninformed_Search.bfs(start, goal, grid)
             draw_path(path)
             export_frontier(frontier , 'BFS')
-            compareAlgos['BFS'].append(timeTaken)
+            compareAlgos['BFS'] = timeTaken
            
         elif selected_algorithm == 'DFS':
             path, frontier, step_count, timeTaken = Uninformed_Search.dfs(start, goal, grid)
             draw_path(path)
             export_frontier(frontier , 'DFS')
-            compareAlgos['DFS'].append(timeTaken)
+            compareAlgos['DFS'] = timeTaken
 
-        elif selected_algorithm == 'A*':
+        elif selected_algorithm == 'A Star':
             path, frontier, step_count , timeTaken= Heuristic_Search.a_star(start, goal, grid)
             draw_path(path)
-            export_frontier(frontier , 'A*')
-            compareAlgos['A*'].append(timeTaken)
+            export_frontier(frontier , 'A Star')
+            compareAlgos['A Star'] = timeTaken
 
         elif selected_algorithm == 'UCS':
             path, frontier, step_count, timeTaken = Uninformed_Search.ucs(start, goal, grid)
             draw_path(path)
             export_frontier(frontier , 'UCS')
-            compareAlgos['UCS'].append(timeTaken)
+            compareAlgos['UCS'] = timeTaken
 
         
         elif selected_algorithm == 'IDS':
             path, frontier, step_count, timeTaken = Uninformed_Search.ids(start, goal, grid)
             draw_path(path)
             export_frontier(frontier , 'IDS')
-            compareAlgos['IDS'].append(timeTaken)
+            compareAlgos['IDS'] = timeTaken
 
         
         elif selected_algorithm == 'Greedy BFS':
             path, frontier, step_count, timeTaken = Heuristic_Search.greedy_bfs(start, goal, grid)
             draw_path(path)
             export_frontier(frontier , 'Greedy BFS')
-            compareAlgos['Greedy BFS'].append(timeTaken)
+            compareAlgos['Greedy BFS'] = timeTaken
 
         
         elif selected_algorithm == 'Hill Climbing':
             path, frontier, step_count, timeTaken = Local_Search.hill_climbing(start, goal, grid)
             draw_path(path)
             export_frontier(frontier , 'Hill Climbing')
-            compareAlgos['Hill Climbing'].append(timeTaken)
+            compareAlgos['Hill Climbing'] = timeTaken
 
         
         elif selected_algorithm == 'Simulated Annealing':
             path, frontier, step_count, timeTaken = Local_Search.simulated_annealing(start, goal, grid)
             draw_path(path)
             export_frontier(frontier , 'Simulated Annealing')
-            compareAlgos['Simulated Annealing'].append(timeTaken)
+            compareAlgos['Simulated Annealing'] = timeTaken
 
         
         elif selected_algorithm == 'Genetic Algos':
             path, frontier, step_count, timeTaken = Local_Search.genetic_algorithm(start, goal, grid)
             draw_path(path)
             export_frontier(frontier , 'Genetic Algos')
-            compareAlgos['Genetic Algos'].append(timeTaken)
+            compareAlgos['Genetic Algos'] = timeTaken
 
 
         font = pygame.font.Font(None, 25)
