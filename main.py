@@ -1,6 +1,7 @@
 import pygame
 import sys
-import pandas as pd
+# import pandas as pd
+import os 
 import time 
 import random 
 
@@ -21,7 +22,7 @@ compareAlgos = {
 }
 
 DIRECTIONS = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-WIDTH, HEIGHT = 1300, 600
+WIDTH, HEIGHT = 1300, 640
 CELL_SIZE = 20
 MAZE_WIDTH = WIDTH // CELL_SIZE - 10
 MAZE_HEIGHT = HEIGHT // CELL_SIZE
@@ -34,10 +35,11 @@ BUTTON_BORDER_COLOR = (0, 0, 0)
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
-def export_frontier(frontier):
-    with open("frontier.txt", "w") as f:
+def export_frontier(frontier , algorithm):
+    with open(f"frontier_{algorithm}.txt", "w") as f:
         for node in frontier:
             f.write(f"{node}\n")
+
 
 def draw_button(screen, text, x, y, width, height):
     font = pygame.font.Font(None, 20)
@@ -70,7 +72,7 @@ def main():
     path = {}
     frontier = set()
     step_count = 0
-
+    timeTaken = 0
     running = True
     clock = pygame.time.Clock()
 
@@ -126,34 +128,54 @@ def main():
         if selected_algorithm == 'BFS':
             path, frontier, step_count , timeTaken = Uninformed_Search.bfs(start, goal, grid)
             draw_path(path)
+            export_frontier(frontier , 'BFS')
+
         elif selected_algorithm == 'DFS':
             path, frontier, step_count, timeTaken = Uninformed_Search.dfs(start, goal, grid)
             draw_path(path)
+            export_frontier(frontier , 'DFS')
+        
         elif selected_algorithm == 'A*':
             path, frontier, step_count , timeTaken= Heuristic_Search.a_star(start, goal, grid)
             draw_path(path)
+            export_frontier(frontier , 'A*')
+        
         elif selected_algorithm == 'UCS':
             path, frontier, step_count, timeTaken = Uninformed_Search.ucs(start, goal, grid)
             draw_path(path)
+            export_frontier(frontier , 'UCS')
+        
         elif selected_algorithm == 'IDS':
             path, frontier, step_count, timeTaken = Uninformed_Search.ids(start, goal, grid)
             draw_path(path)
+            export_frontier(frontier , 'IDS')
+        
         elif selected_algorithm == 'Greedy BFS':
             path, frontier, step_count, timeTaken = Heuristic_Search.greedy_bfs(start, goal, grid)
             draw_path(path)
+            export_frontier(frontier , 'Greedy BFS')
+        
         elif selected_algorithm == 'Hill Climbing':
             path, frontier, step_count, timeTaken = Local_Search.hill_climbing(start, goal, grid)
             draw_path(path)
+            export_frontier(frontier , 'Hill Climbing')
+        
         elif selected_algorithm == 'Simulated Annealing':
             path, frontier, step_count, timeTaken = Local_Search.simulated_annealing(start, goal, grid)
             draw_path(path)
+            export_frontier(frontier , 'Simulated Annealing')
+        
         elif selected_algorithm == 'Genetic Algos':
             path, frontier, step_count, timeTaken = Local_Search.genetic_algorithm(start, goal, grid)
             draw_path(path)
+            export_frontier(frontier , 'Genetic Algos')
 
-        font = pygame.font.Font(None, 30)
+        font = pygame.font.Font(None, 25)
         text = font.render(f"Steps: {step_count}", True, BLACK)
+        time_taken = font.render(f"Time Taken : {timeTaken* 1e-2}",True , BLACK)
+
         screen.blit(text, (button_x, button_y + 9 * button_gap))
+        screen.blit(time_taken, (button_x, button_y + 9.5 * button_gap))
 
         pygame.display.flip()
 
