@@ -43,3 +43,41 @@ def generate_maze(grid, start_cell):
             stack.append(neighbor)
         else:
             stack.pop()
+
+def export_frontier(frontier , algorithm):
+    dir = rf"{os.getcwd()}\Forntier Results" 
+
+    if not os.path.exists(dir):
+        os.mkdir(dir)
+    
+    with open(os.path.join(dir, f"frontier_{algorithm}.txt"), "w") as f:
+        for node in frontier:
+            f.write(f"{node}\n")
+
+def draw_button(screen, text, x, y, width, height):
+    font = pygame.font.Font(None, 20)
+    pygame.draw.rect(screen, BUTTON_COLOR, (x, y, width, height))
+    pygame.draw.rect(screen, BUTTON_BORDER_COLOR, (x, y, width, height), 2)
+    
+    if ' ' in text: 
+        lines = text.split(' ', 1)
+        line1 = font.render(lines[0], True, BLACK)
+        line2 = font.render(lines[1], True, BLACK)
+        screen.blit(line1, (x + (width - line1.get_width()) // 2, y + 5))
+        screen.blit(line2, (x + (width - line2.get_width()) // 2, y + height // 2 + 5))
+    else:
+        text_surface = font.render(text, True, BLACK)
+        text_rect = text_surface.get_rect(center=(x + width // 2, y + height // 2))
+        screen.blit(text_surface, text_rect)
+
+def draw_path(path):
+    for node in path:
+        pygame.draw.rect(screen, GREEN, (node[0] * CELL_SIZE, node[1] * CELL_SIZE, CELL_SIZE, CELL_SIZE))
+
+def showDifferences_ExcutionTime(compareAlgos) :
+    plt.bar(compareAlgos.index , compareAlgos.values , marker = 'o' , linestyle = "-")
+    plt.xlabel("Searching Algorithm")
+    plt.xticks(rotation = 90)
+    plt.ylabel ("Excution Time")
+    plt.grid(True)
+    plt.show()
