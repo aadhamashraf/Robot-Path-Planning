@@ -27,6 +27,7 @@ def bfs(start, goal, grid):
         path.append(current)
         current = parent[current]
     endTime = time.time()
+    # final_time_taken = 
     return path[::-1], frontier, steps , endTime-startTime
 
 """ DFS Algorithm """
