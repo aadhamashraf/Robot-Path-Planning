@@ -2,6 +2,7 @@ import pygame
 import sys
 # import pandas as pd
 import os 
+import os.path
 import time 
 import random 
 
@@ -36,10 +37,14 @@ pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 def export_frontier(frontier , algorithm):
-    with open(f"frontier_{algorithm}.txt", "w") as f:
+    dir = rf"{os.getcwd()}\Forntier Results" 
+
+    if not os.path.exists(dir):
+        os.mkdir(dir)
+    
+    with open(os.path.join(dir, f"frontier_{algorithm}.txt"), "w") as f:
         for node in frontier:
             f.write(f"{node}\n")
-
 
 def draw_button(screen, text, x, y, width, height):
     font = pygame.font.Font(None, 20)
