@@ -11,56 +11,62 @@ DIRECTIONS = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 # Probability function
 def probability(deltaE, T):
     k = 1e-2  # Boltzmann constant
-    exp = -deltaE / (k * T)
-    return math.e ** exp
+    return math.exp(-deltaE / (k * T))
 
-# Simulated Annealing search algorithm
+# Simulated Annealing algorithm for grid-based pathfinding
 
 
-def simulated_annealing(start, goal, grid):
-    startTime = time.time()  # Start timing
+def simulated_annealing(start, goal, grid, n_iterations=1000, temp=1000):
+    start_time = time.time()
     current = start
-    parent = {start: None}  # Track parent nodes
-    frontier = set()
-    steps = 0  # Step counter
-    T = 100  # Initial temperature
-    T_min = 1e-3  # Minimum temperature
-    alpha = 0.9  # Cooling rate
+    best = current
+    parent = {start: None}
+    frontier = {start}
+    steps = 0
+    curr_eval = abs(current[0] - goal[0]) + abs(current[1] - goal[1])
 
-    while T > T_min:
+    for i in range(n_iterations):
         steps += 1
-        frontier.add(current)
-
-        # Choose a random direction
+        # Generate a random direction and compute the next node
         i, j = random.choice(DIRECTIONS)
         next_node = (current[0] + i, current[1] + j)
 
-        # Check if the next node is valid
-        if 0 <= next_node[0] < len(grid[0]) and 0 <= next_node[1] < len(grid) and not grid[next_node[1]][next_node[0]].walls[(i + 2) % 4]:
-            if next_node not in parent:  # Check if node is already visited
-                deltaE = 1  # Example energy difference; can vary based on the problem
+        # Check if the next node is within bounds and not a wall
+        if (
+            0 <= next_node[0] < len(grid[0]) and
+            0 <= next_node[1] < len(grid) and
+            # Assuming 0 is free, 1 is wall
+            grid[next_node[1]][next_node[0]] == 0
+        ):
+            candidate_eval = abs(
+                next_node[0] - goal[0]) + abs(next_node[1] - goal[1])
+            deltaE = candidate_eval - curr_eval
 
-                # Decide to move based on probability
-                if deltaE < 0 or random.random() < probability(deltaE, T):
-                    parent[next_node] = current
-                    current = next_node
-                    if current == goal:
-                        break
+            # Accept based on the probability
+            T = temp / float(i + 1)  # Cooling schedule
+            if deltaE < 0 or random.random() < probability(deltaE, T):
+                current = next_node
+                curr_eval = candidate_eval
+                parent[next_node] = best
+                frontier.add(next_node)
 
-        T *= alpha  # Reduce the temperature
+            # Update best if this candidate is closer to the goal
+            if candidate_eval < abs(best[0] - goal[0]) + abs(best[1] - goal[1]):
+                best = next_node
 
-    # Reconstruct the path using the parent dictionary
+            # Break if the goal is reached
+            if current == goal:
+                break
+
+    # Reconstruct the path
     path = []
-    current = goal
-    while current != start:
-        path.append(current)
-        current = parent.get(current)
-        if current is None:
-            break
-    path.append(start)
+    node = best
+    while node:
+        path.append(node)
+        node = parent.get(node)
 
-    endTime = time.time()  # End timing
-    return path[::-1], frontier, steps, endTime - startTime
+    end_time = time.time()
+    return path[::-1], frontier, steps, end_time - start_time
 
 
 """Genetic Algorithms"""
