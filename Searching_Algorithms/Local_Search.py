@@ -27,11 +27,9 @@ def simulated_annealing(start, goal, grid, n_iterations=1000, temp=1000):
 
     for i in range(n_iterations):
         steps += 1
-        # Generate a random direction and compute the next node
         i, j = random.choice(DIRECTIONS)
         next_node = (current[0] + i, current[1] + j)
 
-        # Check if the next node is within bounds and not a wall
         if (
             0 <= next_node[0] < len(grid[0]) and
             0 <= next_node[1] < len(grid) and
@@ -42,7 +40,6 @@ def simulated_annealing(start, goal, grid, n_iterations=1000, temp=1000):
                 next_node[0] - goal[0]) + abs(next_node[1] - goal[1])
             deltaE = candidate_eval - curr_eval
 
-            # Accept based on the probability
             T = temp / float(i + 1)  # Cooling schedule
             if deltaE < 0 or random.random() < probability(deltaE, T):
                 current = next_node
@@ -50,15 +47,12 @@ def simulated_annealing(start, goal, grid, n_iterations=1000, temp=1000):
                 parent[next_node] = best
                 frontier.add(next_node)
 
-            # Update best if this candidate is closer to the goal
             if candidate_eval < abs(best[0] - goal[0]) + abs(best[1] - goal[1]):
                 best = next_node
 
-            # Break if the goal is reached
             if current == goal:
                 break
 
-    # Reconstruct the path
     path = []
     node = best
     while node:
