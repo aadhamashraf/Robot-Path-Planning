@@ -98,7 +98,7 @@ def main():
     button_height = 45
     button_y = 30
     button_gap = 60 
-
+    l = 10
     while running:
         screen.fill(WHITE)
 
@@ -111,6 +111,8 @@ def main():
         draw_button(screen, 'DFS', button_x, button_y + button_gap, button_width, button_height)
         draw_button(screen, 'UCS', button_x, button_y + 2 * button_gap, button_width, button_height)
         draw_button(screen, 'IDS', button_x, button_y + 3 * button_gap, button_width, button_height)
+        draw_button(screen, '-'  , button_x + button_width + 5, button_y + 3 * button_gap, button_width/8, button_height)
+        draw_button(screen, '+'  , button_x + button_width + 40, button_y + 3 * button_gap, button_width/8, button_height)
         draw_button(screen, 'Greedy BFS', button_x, button_y + 4 * button_gap, button_width, button_height)
         draw_button(screen, 'A Star', button_x, button_y + 5 * button_gap, button_width, button_height)
         draw_button(screen, 'Hill Climbing', button_x, button_y + 6 * button_gap, button_width, button_height)
@@ -132,6 +134,11 @@ def main():
                     selected_algorithm = 'UCS'
                 elif button_x <= x <= button_x + button_width and button_y + 3 * button_gap <= y <= button_y + 3 * button_gap + button_height:
                     selected_algorithm = 'IDS'
+                elif button_x + button_width + 5 <= x <= button_x + button_width + 5 + button_width/8 and button_y + 3 * button_gap <= y <= button_y + 3 * button_gap + button_height:
+                    if l > 0:
+                        l-=5
+                elif button_x + button_width + 40 <= x <= button_x + button_width + 40 + button_width/8 and button_y + 3 * button_gap <= y <= button_y + 3 * button_gap + button_height:
+                    l+=5
                 elif button_x <= x <= button_x + button_width and button_y + 4 * button_gap <= y <= button_y + 4 * button_gap + button_height:
                     selected_algorithm = 'Greedy BFS'
                 elif button_x <= x <= button_x + button_width and button_y + 5 * button_gap <= y <= button_y + 5 * button_gap + button_height:
@@ -171,7 +178,7 @@ def main():
 
         
         elif selected_algorithm == 'IDS':
-            path, frontier, step_count, timeTaken = Uninformed_Search.ids(start, goal, grid)
+            path, frontier, step_count, timeTaken = Uninformed_Search.ids(start, goal, grid, l)
             draw_path(path)
             export_frontier(frontier , 'IDS')
             compareAlgos['IDS'] = timeTaken
@@ -210,6 +217,8 @@ def main():
         
         screen.blit(text, (button_x, button_y + 10 * button_gap))
 
+        lIds = font.render(f"{l}", True, BLACK)
+        screen.blit(lIds, (button_x+button_width+19, button_y + 3 * button_gap + button_height/3 ))
         pygame.display.flip()
 
         clock.tick(10)

@@ -1,6 +1,5 @@
-from main import DIRECTIONS
-from main import deque
-from main import time
+from main import DIRECTIONS,deque,time
+
 
 """ BFS Algorithm """
 def bfs(start, goal, grid):
@@ -62,3 +61,32 @@ def dfs(start, goal, grid):
 """ UCS Algorithm """
 
 """ IDS Algorithm """
+def ids(start, goal, grid,l = 1):
+    startTime = time.time()
+    stack = [start]
+    parent = {start: None}
+    frontier = set()
+    steps = 0
+    current = 0
+    while stack:
+        current = stack.pop()
+        frontier.add(current)
+        steps += 1
+        if current == goal:
+            break
+        if l == 0:
+            break
+        for i, (dx, dy) in enumerate(DIRECTIONS):
+            nx, ny = current[0] + dx, current[1] + dy
+            if 0 <= nx < len(grid[0]) and 0 <= ny < len(grid) and not grid[ny][nx].walls[(i + 2) % 4]:
+                if (nx, ny) not in parent:
+                    parent[(nx, ny)] = current
+                    stack.append((nx, ny))
+        l-=1
+    path = []
+    
+    while current != start:
+        path.append(current)
+        current = parent[current]
+    endTime = time.time()
+    return path[::-1], frontier, steps , endTime-startTime
