@@ -24,7 +24,8 @@ def bfs(maze, start, goal):
                 x, y = parent[(x, y)]
             path.append(start)
             return path[::-1]
-
+        
+        # DIRECTIONS = [(0, 1), (1, 0), (0, -1), (-1, 0)]
         for dx, dy in DIRECTIONS:
             nx, ny = x + dx, y + dy
             if 0 <= nx < MAZE_WIDTH and 0 <= ny < MAZE_HEIGHT and not visited[ny][nx] and maze[ny][nx] == 0:
