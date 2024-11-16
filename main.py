@@ -99,6 +99,28 @@ def main():
         comparewell.export_frontier(frontier, "A Star")
         compareAlgos['A Star'] = [elapsed_time, step_count]
 
+    def solve_simulated_annealing():
+        nonlocal path
+        global step_count
+
+        print("Solving with Simulated Annealing...")
+
+        path, frontier, step_count, elapsed_time = Local_Search.simulated_annealing(
+            maze, start_pos, goal_pos)
+        comparewell.export_frontier(frontier, "Simulated Annealing")
+        compareAlgos['Simulated Annealing'] = [elapsed_time, step_count]
+
+    def solve_genetic_algorithm():
+        nonlocal path
+        global step_count
+
+        print("Solving with Genetic Algorithm...")
+
+        path, frontier, step_count, elapsed_time = Local_Search.genetic_algorithm(
+            maze, start_pos, goal_pos)
+        comparewell.export_frontier(frontier, "Genetic Algorithm")
+        compareAlgos['Genetic Algorithm'] = [elapsed_time, step_count]
+
     def reset_path():
         nonlocal path
         path = None
@@ -129,10 +151,10 @@ def main():
          button_width, button_height, None, solve_Astar),
         ('Hill Climbing', button_x, button_y + 6 * (button_height +
          button_gap), button_width, button_height, None, None),
-        ('Simulated Annealing', button_x, button_y + 7 *
-         (button_height + button_gap), button_width, button_height, None, None),
-        ('Genetic Algos', button_x, button_y + 8 * (button_height +
-         button_gap), button_width, button_height, None, None),
+        ('Simulated Annealing', button_x, button_y + 7 * (button_height + button_gap),
+            button_width, button_height, None, solve_simulated_annealing),
+        ('Genetic Algorithm', button_x, button_y + 8 * (button_height + button_gap),
+            button_width, button_height, None, solve_genetic_algorithm),
         ('Compare Algos', button_x, button_y + 9 * (button_height + button_gap),
          button_width, button_height, None, compare_ExcutionTime),
         ('Reset path', button_x, button_y + 10 * (button_height + button_gap),
