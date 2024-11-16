@@ -78,15 +78,13 @@ def draw_maze(screen, maze, start, goal, path=None):
                 pygame.draw.rect(screen, BLACK, (x * CELL_SIZE,
                                  y * CELL_SIZE, CELL_SIZE, CELL_SIZE))
 
-<<<<<<< HEAD
     robot_img = pygame.image.load(
         r"C:\Users\Hozien\Desktop\UST-CSAI\Year 3 Semester 1\CSAI 301 AI\Project\AI-FL24-GP\Environment\assets\robot.png")
     flag_img = pygame.image.load(
         r"C:\Users\Hozien\Desktop\UST-CSAI\Year 3 Semester 1\CSAI 301 AI\Project\AI-FL24-GP\Environment\assets\flag.jpg")
-=======
-    robot_img = pygame.image.load(r".\Environment\assets\robot.png")  
-    flag_img = pygame.image.load(r".\Environment\assets\flag.jpg")    
->>>>>>> e50409170d6d6ee478f6a0f765dee2b81ba1dc2d
+
+    robot_img = pygame.image.load(r".\Environment\assets\robot.png")
+    flag_img = pygame.image.load(r".\Environment\assets\flag.jpg")
 
     robot_img = pygame.transform.scale(robot_img, (40, 40))
     flag_img = pygame.transform.scale(flag_img, (40, 40))
@@ -98,9 +96,9 @@ def draw_maze(screen, maze, start, goal, path=None):
 
     if path:
         for (x, y) in path:
-<<<<<<< HEAD
+
             pygame.draw.rect(screen, GREEN, (x * CELL_SIZE - 5,
                              y * CELL_SIZE - 5, CELL_SIZE - 5, CELL_SIZE - 5))
-=======
-            pygame.draw.rect(screen, GREEN, (x * CELL_SIZE , y * CELL_SIZE, CELL_SIZE- 5, CELL_SIZE- 5))
->>>>>>> e50409170d6d6ee478f6a0f765dee2b81ba1dc2d
+
+    pygame.draw.rect(screen, GREEN, (x * CELL_SIZE, y *
+                                     CELL_SIZE, CELL_SIZE - 5, CELL_SIZE - 5))
