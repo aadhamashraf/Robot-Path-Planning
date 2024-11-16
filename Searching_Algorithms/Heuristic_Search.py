@@ -44,7 +44,7 @@ def greedy_bfs(maze, start, goal):
 
         frontier.append(list(open_list))  
 
-    return None, frontier, step_count, None
+    return path, frontier, step_count, elapsed_time
 
 def a_star(maze, start, goal):
     start_time = time.time()  
@@ -90,4 +90,4 @@ def a_star(maze, start, goal):
 
         frontier.append(list(open_list))  
 
-    return None, frontier, step_count, None
+    return path, frontier, step_count, elapsed_time
