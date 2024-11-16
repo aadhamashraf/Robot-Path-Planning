@@ -2,7 +2,6 @@ from Basic_Attributes import *
 
 # BFS Algorithm
 
-
 def bfs(maze, start, goal):
     startTime = time.time()
     visited = [[False] * MAZE_WIDTH for _ in range(MAZE_HEIGHT)]
