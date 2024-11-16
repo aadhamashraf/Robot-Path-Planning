@@ -6,85 +6,98 @@ def distance_metric(a, b):
     y = abs(a[1] - b[1])
     return x + y
 
-def greedy_bfs(g, e, d):
+def greedy_bfs(grid, start, goal):
     started = time.time()
-    pq , at , es  , visited = [] , {} , [] , set()
+    priorityqueue, at, es, visited = [], {}, [], set()
     counter = 0
+    priorityqueue.append((0, start))
+    visited.add(start)
 
-    pq.append((0, e))
-    visited.add(e)
-
-    while pq:
-        pq.sort(key=lambda x: x[0])  
-        c, n = pq.pop(0) 
+    while (priorityqueue):
+        priorityqueue.sort(key=lambda x: x[0])  
+        cost, n = priorityqueue.pop(0)  
         temp = [] 
         counter += 1
 
-        if n == d:
+        if (n == goal):
             p = []
-            while n in at:
+            while (n in at):
                 p.append(n)
                 n = at[n]
-            p.append(e)
+            p.append(start)
             return p[::-1], es, counter, time.time() - started
 
         x = n[0]
         y = n[1]
 
         for di in DIRECTIONS:
-            nei = (x + di[0], y + di[1])
-            if (0 <= nei[0] < len(g[0])) and (0 <= nei[1] < len(g)):
-                if (g[nei[1]][nei[0]] == 0) and (nei not in visited):
+            nei_x = x + di[0]
+            nei_y = y + di[1]
+            nei = (nei_x, nei_y)
+
+            within_x = (0 <= nei_x < len(grid[0]))
+            within_y = (0 <= nei_y < len(grid))
+
+            if (within_x and within_y):
+                is_walkable = grid[nei_y][nei_x] == 0
+                is_not_visited = nei not in visited
+
+                if (is_walkable and is_not_visited):
                     visited.add(nei)
                     at[nei] = n
-                    pq.append((distance_metric(nei, d), nei))
-        
-        for node in pq :
+                    priorityqueue.append((distance_metric(nei, goal), nei))
+
+        for node in priorityqueue:
             temp.append(node[-1])
         es.append(temp)
 
     return None, es, counter, time.time() - started
 
-def a_star(g, e, d):
+def a_star(grid, start, goal):
     t = time.time()
-    pq , am , tc , pc , vl , tj = [] , {} , {e:0}  , {e: distance_metric(e, d)} , set () , []
-    
+    priorityqueue, am, tc, pc, vl, tj = [], {}, {start: 0}, {start: distance_metric(start, goal)}, set(), []
     counter = 0
+    priorityqueue.append((0, start))
 
-    pq.append((0, e))
-
-    while pq:
-        pq.sort(key=lambda x: x[0]) 
-        cost, n = pq.pop(0)  
+    while priorityqueue:
+        priorityqueue.sort(key=lambda x: x[0])  
+        cost, n = priorityqueue.pop(0)  
         counter += 1
 
-        if n == d:
+        if n == goal:
             p = []
             while n in am:
                 p.append(n)
                 n = am[n]
-            p.append(e)
+            p.append(start)
             return p[::-1], tj, counter, time.time() - t
 
         vl.add(n)
-
         x = n[0]
         y = n[1]
 
         for di in DIRECTIONS:
-            nei = (x + di[0], y + di[1])
+            nei_x = x + di[0]
+            nei_y = y + di[1]
+            nei = (nei_x, nei_y)
 
-            if (0 <= nei[0] < MAZE_WIDTH) and (0 <= nei[1] < MAZE_HEIGHT):
-                if g[nei[1]][nei[0]] == 0:
+            within_x = 0 <= nei_x < len(grid[0])
+            within_y = 0 <= nei_y < len(grid)
+
+            if within_x and within_y:
+                is_walkable = grid[nei_y][nei_x] == 0
+
+                if is_walkable:
                     ic = tc[n] + 1
-                    if (nei not in vl) or (ic < tc.get(nei, float('inf'))):
-                        am[nei] , tc[nei] = n , ic
-                        pc[nei] = ic + distance_metric(nei, d)
-                        pq.append((pc[nei], nei))
-        temp = []
-        for i in pq :
-            temp.append(i[1])
+                    if nei not in vl or ic < tc.get(nei, float('inf')):
+                        am[nei] = n
+                        tc[nei] = ic
+                        pc[nei] = ic + distance_metric(nei, goal)
+                        priorityqueue.append((pc[nei], nei))
 
+        temp = []
+        for i in priorityqueue:
+            temp.append(i[1])
         tj.append(temp)
 
     return None, tj, counter, time.time() - t
