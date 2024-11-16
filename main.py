@@ -14,13 +14,13 @@ compareAlgos = {
     "Genetic Algos": 0
 }
 
-maze = start_pos = goal_pos = path = step_count = 0
+maze = start_pos = goal_pos = path = step_count = l = 0
 
 def main():
     pygame.init()
     pygame.mixer.init()
     
-    pygame.mixer.music.load(r"C:\Users\Prof.Ashraf\source\repos\Trial_AI_15_11\Trial_AI_15_11\Environment\assets\01. Ground Theme.mp3")
+    pygame.mixer.music.load(r".\Environment\assets\01. Ground Theme.mp3")
     pygame.mixer.music.set_volume(1)  
     pygame.mixer.music.play(-1, 0.0) 
 
@@ -33,15 +33,35 @@ def main():
 
     def solve_bfs():
         nonlocal path
+        global step_count
+        print("Solving with BFS...")
         path , frontier, step_count, elapsed_time = Uninformed_Search.bfs(maze, start_pos, goal_pos)
         compareAlgos['BFS'] = elapsed_time
     
     def solve_dfs():
         nonlocal path
-        path, frontier, steps, timetaken = Uninformed_Search.dfs(maze, start_pos, goal_pos)
+        global step_count
+        print("Solving with DFS...")
+        path, frontier, step_count, timetaken = Uninformed_Search.dfs(maze, start_pos, goal_pos)
         comparewell.export_frontier(frontier, "DFS")
         compareAlgos["DFS"] = timetaken
-        
+    def solve_ids():
+        nonlocal path
+        global step_count
+        global l
+        print("Solving with DFS...")
+        path, frontier, step_count, timetaken = Uninformed_Search.ids(maze, start_pos, goal_pos, l)
+        comparewell.export_frontier(frontier, "DFS")
+        compareAlgos["IDS"] = timetaken
+    def increaseL():
+        global l
+        l+=5
+        solve_ids()
+    def decreaseL():
+        global l
+        if l > 0:
+            l-=5 
+        solve_ids()
     def solve_greedy_BFS():
         print("Solving with Greedy BFS...")
         path , frontier, step_count, elapsed_time = Heuristic_Search.greedy_bfs(maze, start_pos, goal_pos)
@@ -70,8 +90,8 @@ def main():
         ('DFS', button_x, button_y + button_height + button_gap, button_width, button_height, None, solve_dfs),
         ('UCS', button_x, button_y + 2 * (button_height + button_gap), button_width, button_height, None, solve_dfs),
         ('IDS', button_x, button_y + 3 * (button_height + button_gap), button_width - 60, button_height, None, None),  
-        ('-', button_x + button_width - 2 * (button_width / 8) - 10 , button_y + 3 * (button_height + button_gap), button_width / 8, button_height, None, None), 
-        ('+', button_x + button_width - (button_width / 8) - 10, button_y + 3 * (button_height + button_gap), button_width / 8, button_height, None, None), 
+        ('-', button_x + button_width - (button_width / 8) - 42 , button_y + 3 * (button_height + button_gap), button_width / 8, button_height, None, decreaseL), 
+        ('+', button_x + button_width - (button_width / 8)      , button_y + 3 * (button_height + button_gap), button_width / 8, button_height, None, increaseL), 
         ('Greedy BFS', button_x, button_y + 4 * (button_height + button_gap), button_width, button_height, None, solve_greedy_BFS),  
         ('A Star', button_x, button_y + 5 * (button_height + button_gap), button_width, button_height, None, solve_Astar),  
         ('Hill Climbing', button_x, button_y + 6 * (button_height + button_gap), button_width, button_height, None, None),  
@@ -111,6 +131,9 @@ def main():
         font = pygame.font.Font(None, 25)
         text = font.render(f"Steps: {step_count}", True, BLACK)
         screen.blit(text, (button_x, button_y + 60 * button_gap))
+        
+        text = font.render(f"{l}", True, BLACK)
+        screen.blit(text, (button_x + button_width - (button_width *2.7 / 8) , button_y + 3 * (button_height + button_gap) + 12.5))
 
         pygame.display.flip()
 
