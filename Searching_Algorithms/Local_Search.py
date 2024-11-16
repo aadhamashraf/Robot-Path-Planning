@@ -18,49 +18,41 @@ def simulated_annealing(maze, start, goal):
     start_time = time.time()
     current = start
     current_cost = calculate_cost(current)
-    temperature = 1000.0  # Initial temperature
-    cooling_rate = 1.0  # Cooling rate per iteration
+    temperature = 1000.0
+    cooling_rate = 1.0
     path = [current]
     steps = 0
 
     while temperature > 1:
         steps += 1
 
-        # Get valid neighbors
         neighbors = []
         for dx, dy in DIRECTIONS:
             nx, ny = current[0] + dx, current[1] + dy
             if 0 <= nx < MAZE_WIDTH and 0 <= ny < MAZE_HEIGHT and maze[ny][nx] == 0:
                 neighbors.append((nx, ny))
 
-        # If no neighbors are available, break out of the loop
         if not neighbors:
             break
 
-        # Pick a random neighbor
         next_node = random.choice(neighbors)
         next_cost = calculate_cost(next_node)
 
-        # Calculate acceptance probability
         delta_cost = next_cost - current_cost
         acceptance_probability = math.exp(-delta_cost /
                                           temperature) if delta_cost > 0 else 1.0
 
-        # Decide whether to accept the neighbor
         if random.random() < acceptance_probability:
             current = next_node
             current_cost = next_cost
             path.append(current)
 
-        # If the goal is reached, stop
         if current == goal:
             end_time = time.time()
             return path, [], steps, end_time - start_time
 
-        # Cool down
         temperature *= cooling_rate
 
-    # If no solution is found, return None
     end_time = time.time()
     return None, [], steps, end_time - start_time
 
@@ -105,34 +97,27 @@ def genetic_algorithm(maze, start, goal, population_size=500, generations=1000, 
 
     start_time = time.time()
 
-    # Initialize population
     population = [create_individual() for _ in range(population_size)]
 
     best_individual = None
     best_fitness = float('-inf')
 
     for generation in range(generations):
-        # Calculate fitness for each individual
         fitness_scores = [(fitness(individual), individual)
                           for individual in population]
 
-        # Sort by fitness (descending)
         fitness_scores.sort(reverse=True)
         population = [individual for _, individual in fitness_scores]
 
-        # Track the best solution
         if fitness_scores[0][0] > best_fitness:
             best_fitness = fitness_scores[0][0]
             best_individual = fitness_scores[0][1]
 
-        # If the goal is reached, stop
         if simulate_path(best_individual) == goal:
             break
 
-        # Select parents (top 50%)
         parents = population[:population_size // 2]
 
-        # Generate new population through crossover and mutation
         new_population = []
         while len(new_population) < population_size:
             parent1, parent2 = random.sample(parents, 2)
@@ -141,7 +126,6 @@ def genetic_algorithm(maze, start, goal, population_size=500, generations=1000, 
 
         population = new_population
 
-    # Simulate the best path
     best_path = []
     position = list(start)
     for move in best_individual:
