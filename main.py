@@ -64,10 +64,14 @@ def main():
         solve_ids()
     def solve_greedy_BFS():
         print("Solving with Greedy BFS...")
+        nonlocal path
+        global step_count
         path , frontier, step_count, elapsed_time = Heuristic_Search.greedy_bfs(maze, start_pos, goal_pos)
         compareAlgos['Greedy BFS'] = elapsed_time
 
     def solve_Astar():
+        nonlocal path
+        global step_count
         print("Solving with A*...")
         path , frontier, step_count, elapsed_time = Heuristic_Search.a_star(maze, start_pos, goal_pos)
         compareAlgos['A Star'] = elapsed_time
