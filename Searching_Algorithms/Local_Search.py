@@ -1,6 +1,5 @@
 from Basic_Attributes import * 
 
-
 """Hill Climbing"""
 
 """Simualted Annealing"""
