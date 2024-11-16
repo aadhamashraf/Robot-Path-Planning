@@ -22,7 +22,7 @@ def main():
     pygame.mixer.init()
 
     pygame.mixer.music.load(
-        r"C:\Users\Prof.Ashraf\source\repos\Trial_AI_15_11\Trial_AI_15_11\Environment\assets\01. Ground Theme.mp3")
+        r"C:\Users\Hozien\Desktop\UST-CSAI\Year 3 Semester 1\CSAI 301 AI\Project\AI-FL24-GP\Environment\assets\01. Ground Theme.mp3")
     pygame.mixer.music.set_volume(1)
     pygame.mixer.music.play(-1, 0.0)
 
@@ -58,6 +58,12 @@ def main():
             maze, start_pos, goal_pos)
         compareAlgos['A Star'] = elapsed_time
 
+    def solve_simulated_annealing():
+        print("Solving with Simulated Annealing...")
+        path, frontier, step_count, elapsed_time = Local_Search.simulated_annealing(
+            maze, start_pos, goal_pos)
+        compareAlgos['Simulated Annealing'] = elapsed_time
+
     def reset_path():
         nonlocal path
         path = None
@@ -89,7 +95,7 @@ def main():
         ('Hill Climbing', button_x, button_y + 6 * (button_height +
          button_gap), button_width, button_height, None, None),
         ('Simulated Annealing', button_x, button_y + 7 *
-         (button_height + button_gap), button_width, button_height, None, None),
+         (button_height + button_gap), button_width, button_height, None, solve_simulated_annealing),
         ('Genetic Algos', button_x, button_y + 8 * (button_height +
          button_gap), button_width, button_height, None, None),
         ('Compare Algos', button_x, button_y + 9 * (button_height + button_gap),
