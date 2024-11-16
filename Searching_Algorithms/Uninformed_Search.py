@@ -96,3 +96,38 @@ def ids(maze, start, goal, l=1):
     endTime = time.time()
     return path[::-1], frontier, steps, endTime-startTime
 # UCS Algorithm
+
+
+def ucs(maze, start, goal):
+    startTime = time.time()
+    visited = set()
+    frontier = []
+    parent = {start: None}
+    costs = {start: 0}
+    heapq.heappush(frontier, (0, start))
+    steps = 0
+
+    while frontier:
+        current_cost, current = heapq.heappop(frontier)
+        steps += 1
+        if current in visited:
+            continue
+        visited.add(current)
+        if current == goal:
+            endTime = time.time()
+            path = []
+            while current is not None:
+                path.append(current)
+                current = parent[current]
+            return path[::-1], frontier, steps, endTime - startTime
+        for dx, dy in DIRECTIONS:
+            nx, ny = current[0] + dx, current[1] + dy
+            neighbor = (nx, ny)
+
+            if (0 <= nx < MAZE_WIDTH and 0 <= ny < MAZE_HEIGHT and maze[ny][nx] == 0 and neighbor not in visited):
+                new_cost = current_cost + 1
+                if neighbor not in costs or new_cost < costs[neighbor]:
+                    costs[neighbor] = new_cost
+                    heapq.heappush(frontier, (new_cost, neighbor))
+                    parent[neighbor] = current
+    return None, frontier, steps, time.time() - startTime

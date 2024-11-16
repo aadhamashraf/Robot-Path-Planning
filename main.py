@@ -66,6 +66,28 @@ def main():
         comparewell.export_frontier(frontier, "IDS")
         compareAlgos["IDS"] = [elapsed_time, step_count]
 
+    def solve_ucs():
+        nonlocal path
+        global step_count
+
+        print("Solving with UCS...")
+
+        path, frontier, step_count, elapsed_time = Uninformed_Search.ucs(
+            maze, start_pos, goal_pos)
+        comparewell.export_frontier(frontier, "UCS")
+        compareAlgos['UCS'] = [elapsed_time, step_count]
+
+    def solve_hill_climbing():
+        nonlocal path
+        global step_count
+
+        print("Solving with Hill Climbing...")
+
+        path, frontier, step_count, elapsed_time = Local_Search.hill_climbing(
+            maze, start_pos, goal_pos)
+        comparewell.export_frontier(frontier, "Hill Climbing")
+        compareAlgos['Hill Climbing'] = [elapsed_time, step_count]
+
     def increaseL():
         global l
         l += 5
@@ -138,7 +160,7 @@ def main():
         ('DFS', button_x, button_y + button_height + button_gap,
          button_width, button_height, None, solve_dfs),
         ('UCS', button_x, button_y + 2 * (button_height + button_gap),
-         button_width, button_height, None, solve_dfs),
+         button_width, button_height, None, solve_ucs),
         ('IDS', button_x, button_y + 3 * (button_height + button_gap),
          button_width - 60, button_height, None, None),
         ('-', button_x + button_width - (button_width / 8) - 42, button_y + 3 *
@@ -149,8 +171,8 @@ def main():
          button_width, button_height, None, solve_greedy_BFS),
         ('A Star', button_x, button_y + 5 * (button_height + button_gap),
          button_width, button_height, None, solve_Astar),
-        ('Hill Climbing', button_x, button_y + 6 * (button_height +
-         button_gap), button_width, button_height, None, None),
+        ('Hill Climbing', button_x, button_y + 6 * (button_height + button_gap),
+         button_width, button_height, None, solve_hill_climbing),
         ('Simulated Annealing', button_x, button_y + 7 * (button_height + button_gap),
             button_width, button_height, None, solve_simulated_annealing),
         ('Genetic Algorithm', button_x, button_y + 8 * (button_height + button_gap),

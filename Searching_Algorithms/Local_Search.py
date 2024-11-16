@@ -8,6 +8,74 @@ DIRECTIONS = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
 """Hill Climbing"""
 
+
+def manhattan_distance(a, b):
+    return abs(a[0] - b[0]) + abs(a[1] - b[1])
+
+
+def hill_climbing(maze, start, goal):
+    startTime = time.time()
+    current = start
+    visited = set([start])
+    path = [current]
+    frontier = set([start])
+    steps = 0
+    stack = []
+
+    while current != goal:
+        steps += 1
+        neighbors = []
+        for dx, dy in DIRECTIONS:
+            nx, ny = current[0] + dx, current[1] + dy
+            if (0 <= nx < MAZE_WIDTH and 0 <= ny < MAZE_HEIGHT and
+                    maze[ny][nx] == 0 and (nx, ny) not in visited):
+                neighbors.append((nx, ny))
+
+        if len(neighbors) > 0:
+            current_distance = manhattan_distance(current, goal)
+
+            better_neighbors = []
+            for n in neighbors:
+                if manhattan_distance(n, goal) < current_distance:
+                    better_neighbors.append(n)
+
+            if len(better_neighbors) > 0:
+                next_pos = better_neighbors[0]
+                min_distance = manhattan_distance(next_pos, goal)
+                for n in better_neighbors:
+                    distance = manhattan_distance(n, goal)
+                    if distance < min_distance:
+                        next_pos = n
+                        min_distance = distance
+            else:
+                next_pos = neighbors[0]
+                min_distance = manhattan_distance(next_pos, goal)
+                for n in neighbors:
+                    distance = manhattan_distance(n, goal)
+                    if distance < min_distance:
+                        next_pos = n
+                        min_distance = distance
+
+            stack.append(current)
+            current = next_pos
+            visited.add(current)
+            frontier.add(current)
+            path.append(current)
+        else:
+            if len(stack) > 0:
+                current = stack.pop()
+                while path[-1] != current:
+                    path.pop()
+            else:
+                return None, frontier, steps, time.time() - startTime
+
+        if steps > MAZE_WIDTH * MAZE_HEIGHT * 2:
+            return None, frontier, steps, time.time() - startTime
+
+    endTime = time.time()
+    return path, frontier, steps, endTime - startTime
+
+
 """Simulated Annealing"""
 
 
