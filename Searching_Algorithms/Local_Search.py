@@ -10,71 +10,60 @@ DIRECTIONS = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
 """Simulated Annealing"""
 
-# Probability function
+# Simulated Annealing Algorithm
+def simulated_annealing(maze, start, goal, initial_temperature=100, cooling_rate=0.95, max_iterations=10000):
+    startTime = time.time()
 
+    current = start
+    path = [current]
+    temperature = initial_temperature
+    frontier = []
+    steps = 0
 
-def probability(deltaE, T):
-    k = 1e-2  # Boltzmann constant
-    return math.exp(-deltaE / (k * T))
+    def calculate_cost(position):
+        """Heuristic cost function: Manhattan distance to the goal."""
+        return abs(position[0] - goal[0]) + abs(position[1] - goal[1])
 
+    current_cost = calculate_cost(current)
 
-def simulated_annealing(maze, start, goal, n_iterations=1000, temp=1000):
-    start_time = time.time()  # Track the start time
+    for iteration in range(max_iterations):
+        steps += 1
+        if current == goal:
+            break
 
-    current = start  # Current position
-    best = start  # Best position found so far
-    came_from = {start: None}  # To reconstruct the path
-    frontier = []  # Store visited nodes for visualization
-    step_count = 0  # Number of steps taken
+        neighbors = []
+        for dx, dy in DIRECTIONS:
+            nx, ny = current[0] + dx, current[1] + dy
+            if 0 <= nx < MAZE_WIDTH and 0 <= ny < MAZE_HEIGHT and maze[ny][nx] == 0:
+                neighbors.append((nx, ny))
 
-    # Manhattan distance to goal
-    current_eval = abs(current[0] - goal[0]) + abs(current[1] - goal[1])
+        if not neighbors:
+            break  # Dead end, no valid moves
 
-    for iteration in range(n_iterations):
-        step_count += 1  # Increment step count
-        dx, dy = random.choice(DIRECTIONS)  # Random direction
-        # Calculate neighbor position
-        neighbor = (current[0] + dx, current[1] + dy)
+        # Randomly pick a neighbor
+        next_position = random.choice(neighbors)
+        next_cost = calculate_cost(next_position)
 
-        # Ensure the neighbor is within bounds and not a wall
-        if 0 <= neighbor[0] < MAZE_WIDTH and 0 <= neighbor[1] < MAZE_HEIGHT:
-            if maze[neighbor[1]][neighbor[0]] == 0:  # 0 indicates free space
-                neighbor_eval = abs(
-                    # Evaluation
-                    neighbor[0] - goal[0]) + abs(neighbor[1] - goal[1])
+        # Acceptance probability
+        delta_cost = next_cost - current_cost
+        acceptance_probability = math.exp(-delta_cost / temperature) if delta_cost > 0 else 1
 
-                delta_e = neighbor_eval - current_eval  # Change in evaluation
-                temperature = temp / (iteration + 1)  # Cooling schedule
+        # Decide whether to accept the move
+        if random.random() < acceptance_probability:
+            current = next_position
+            current_cost = next_cost
+            path.append(current)
 
-                # Accept new state if it improves or with probability
-                if delta_e < 0 or random.random() < probability(delta_e, temperature):
-                    current = neighbor
-                    current_eval = neighbor_eval
-                    came_from[neighbor] = current  # Track parent node
-                    # Add to frontier for visualization
-                    frontier.append(neighbor)
+        frontier.append(list(neighbors))  # Add neighbors to the frontier
 
-                # Update best position found
-                if neighbor_eval < abs(best[0] - goal[0]) + abs(best[1] - goal[1]):
-                    best = neighbor
+        # Cool down the temperature
+        temperature *= cooling_rate
 
-                # Stop if the goal is reached
-                if current == goal:
-                    break
+        # Stop if temperature is very low
+        if temperature < 1e-3:
+            break
 
-    # Reconstruct the path from best position
-    path = []
-    while best in came_from:
-        path.append(best)
-        best = came_from[best]
-    path.reverse()  # Reverse to get the correct order
-
-    end_time = time.time()  # Track the end time
-    elapsed_time = end_time - start_time  # Calculate elapsed time
-
-    comparewell.export_frontier(
-        frontier, "Simulated Annealing")  # Export frontier
-    return path, frontier, step_count, elapsed_time
-
+    endTime = time.time()
+    return path, frontier, steps, endTime - startTime
 
 """Genetic Algorithms"""

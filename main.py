@@ -85,8 +85,11 @@ def main():
     def solve_simulated_annealing():
         print("Solving with Simulated Annealing...")
         path, frontier, step_count, elapsed_time = Local_Search.simulated_annealing(
-            maze, start_pos, goal_pos)
+            maze, start_pos, goal_pos, initial_temperature=1000, cooling_rate=0.003
+        )
         compareAlgos['Simulated Annealing'] = elapsed_time
+
+
 
     def reset_path():
         nonlocal path
@@ -119,7 +122,7 @@ def main():
         ('Hill Climbing', button_x, button_y + 6 * (button_height +
          button_gap), button_width, button_height, None, None),
         ('Simulated Annealing', button_x, button_y + 7 *
-         (button_height + button_gap), button_width, button_height, None, None),
+         (button_height + button_gap), button_width, button_height, None, solve_simulated_annealing),
         ('Genetic Algos', button_x, button_y + 8 * (button_height +
          button_gap), button_width, button_height, None, None),
         ('Compare Algos', button_x, button_y + 9 * (button_height + button_gap),
