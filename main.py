@@ -25,7 +25,7 @@ def main():
     pygame.mixer.music.play(-1, 0.0) 
 
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    pygame.display.set_caption("Maze Solver")
+    pygame.display.set_caption("Robot Path Navigator")
 
     maze, start_pos, goal_pos = mazeSetup.create_maze()
     print(maze)
@@ -33,43 +33,38 @@ def main():
 
     def solve_bfs():
         nonlocal path
-        print("Solving with BFS...")
         path , frontier, step_count, elapsed_time = Uninformed_Search.bfs(maze, start_pos, goal_pos)
         compareAlgos['BFS'] = elapsed_time
     
     def solve_dfs():
         nonlocal path
-        print("Solving with DFS...")
         path, frontier, steps, timetaken = Uninformed_Search.dfs(maze, start_pos, goal_pos)
         comparewell.export_frontier(frontier, "DFS")
         compareAlgos["DFS"] = timetaken
         
     def solve_greedy_BFS():
-        nonlocal path
         print("Solving with Greedy BFS...")
         path , frontier, step_count, elapsed_time = Heuristic_Search.greedy_bfs(maze, start_pos, goal_pos)
         compareAlgos['Greedy BFS'] = elapsed_time
 
     def solve_Astar():
-        nonlocal path
         print("Solving with A*...")
         path , frontier, step_count, elapsed_time = Heuristic_Search.a_star(maze, start_pos, goal_pos)
         compareAlgos['A Star'] = elapsed_time
 
-
+    
     def reset_path():
         nonlocal path
-        print("Resetting path...")
         path = None  
 
     def reset_maze():
         nonlocal maze, start_pos, goal_pos, path
-        print("Resetting maze...")
         maze, start_pos, goal_pos = mazeSetup.create_maze()
         path = None
 
     def compare_ExcutionTime():
         comparewell.showDifferences_ExecutionTime(compareAlgos)
+    
     buttons_properties = [
         ('BFS', button_x, button_y, button_width, button_height, None, solve_bfs),
         ('DFS', button_x, button_y + button_height + button_gap, button_width, button_height, None, solve_dfs),
@@ -124,4 +119,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
