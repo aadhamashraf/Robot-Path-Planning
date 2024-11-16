@@ -1,46 +1,93 @@
-import time
-import heapq
-DIRECTIONS = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+from Basic_Attributes import *  
+from Environment import comparewell
 
+def greedy_bfs(maze, start, goal):
+    start_time = time.time()  
 
-'''Greedy Best-First Search'''
+    open_list = []  
+    heapq.heappush(open_list, (0, start))  
+    came_from = {}  
+    g_score = {start: 0}  
+    frontier = []  
+    step_count = 0  
 
-'''A*'''
+    while open_list:
+        _, current = heapq.heappop(open_list)
+        step_count += 1  
 
-
-def a_star(start, goal, grid):
-    startTime = time.time()
-    open_set = []
-    heapq.heappush(open_set, (0, start))
-    parent = {start: None}
-    g_cost = {start: 0}
-    frontier = set()
-    steps = 0
-
-    def heuristic(a, b):
-        return abs(a[0] - b[0]) + abs(a[1] - b[1])
-
-    while open_set:
-        _, current = heapq.heappop(open_set)
-        frontier.add(current)
-        steps += 1
         if current == goal:
-            break
+            path = []
+            while current in came_from:
+                path.append(current)
+                current = came_from[current]
+            path.reverse()  
 
-        for i, (dx, dy) in enumerate(DIRECTIONS):
-            nx, ny = current[0] + dx, current[1] + dy
-            if 0 <= nx < len(grid[0]) and 0 <= ny < len(grid) and not grid[ny][nx].walls[(i + 2) % 4]:
-                tentative_g = g_cost[current] + 1
-                if (nx, ny) not in g_cost or tentative_g < g_cost[(nx, ny)]:
-                    g_cost[(nx, ny)] = tentative_g
-                    f_cost = tentative_g + heuristic((nx, ny), goal)
-                    heapq.heappush(open_set, (f_cost, (nx, ny)))
-                    parent[(nx, ny)] = current
+            end_time = time.time()  
+            elapsed_time = end_time - start_time  
 
-    path = []
-    current = goal
-    while current != start:
-        path.append(current)
-        current = parent[current]
-    endTime = time.time()
-    return path[::-1], frontier, steps, endTime-startTime
+            comparewell.export_frontier(frontier, "Greedy BFS")
+            return path, frontier, step_count, elapsed_time  
+
+        x, y = current
+        for dx, dy in DIRECTIONS:
+            neighbor = (x + dx, y + dy)
+
+            if 0 <= neighbor[0] < MAZE_WIDTH and 0 <= neighbor[1] < MAZE_HEIGHT:
+                if maze[neighbor[1]][neighbor[0]] == 0:  
+
+                    h = abs(neighbor[0] - goal[0]) + abs(neighbor[1] - goal[1])  
+
+                    if neighbor not in g_score or g_score[neighbor] > g_score[current] + 1:
+                        g_score[neighbor] = g_score[current] + 1
+                        came_from[neighbor] = current
+                        heapq.heappush(open_list, (h, neighbor))
+
+        frontier.append(list(open_list))  
+
+    return None, frontier, step_count, None
+
+def a_star(maze, start, goal):
+    start_time = time.time()  
+
+    open_list = []  
+    heapq.heappush(open_list, (0, start))  
+    came_from = {}  
+    g_score = {start: 0}  
+    f_score = {start: abs(start[0] - goal[0]) + abs(start[1] - goal[1])}  
+    frontier = []  
+    step_count = 0  
+
+    while open_list:
+        _, current = heapq.heappop(open_list)
+        step_count += 1  
+
+        if current == goal:
+            path = []
+            while current in came_from:
+                path.append(current)
+                current = came_from[current]
+            path.reverse()  
+
+            end_time = time.time()  
+            elapsed_time = end_time - start_time  
+
+            comparewell.export_frontier(frontier, "A Star")
+            return path, frontier, step_count, elapsed_time  
+
+        x, y = current
+        for dx, dy in DIRECTIONS:
+            neighbor = (x + dx, y + dy)
+
+            if 0 <= neighbor[0] < MAZE_WIDTH and 0 <= neighbor[1] < MAZE_HEIGHT:
+                if maze[neighbor[1]][neighbor[0]] == 0:  
+                    tentative_g_score = g_score[current] + 1
+
+                    if neighbor not in g_score or tentative_g_score < g_score[neighbor]:
+                        g_score[neighbor] = tentative_g_score
+                        f_score[neighbor] = tentative_g_score + abs(neighbor[0] - goal[0]) + abs(neighbor[1] - goal[1])
+                        came_from[neighbor] = current
+                        heapq.heappush(open_list, (f_score[neighbor], neighbor))
+
+        frontier.append(list(open_list))  
+
+    return None, frontier, step_count, None

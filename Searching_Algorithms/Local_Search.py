@@ -1,12 +1,17 @@
+<<<<<<< HEAD
 import math
 import random
 import time
 DIRECTIONS = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+=======
+from Basic_Attributes import * 
+>>>>>>> 13dae46523ddcaa7a8216d4c3bff890f40393ea4
 
 """Hill Climbing"""
 
 """Simualted Annealing"""
 
+<<<<<<< HEAD
 
 # Probability function
 def probability(deltaE, T):
@@ -63,4 +68,6 @@ def simulated_annealing(start, goal, grid, n_iterations=1000, temp=1000):
     return path[::-1], frontier, steps, end_time - start_time
 
 
+=======
+>>>>>>> 13dae46523ddcaa7a8216d4c3bff890f40393ea4
 """Genetic Algorithms"""
