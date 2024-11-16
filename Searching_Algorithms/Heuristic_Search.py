@@ -2,96 +2,106 @@ from Basic_Attributes import *
 from Environment import comparewell, mazeSetup
 
 
-def heuristic_manhattan(node, goal):
-    return abs(node[0] - goal[0]) + abs(node[1] - goal[1])
+def distance_metric(a, b):
+    x = abs(a[0] - b[0])
+    y = abs(a[1] - b[1])
+    return x + y
 
 
-def greedy_bfs(maze, start, goal):
-    start_time = time.time()
-    open_nodes = []
-    visited_nodes = set()
-    path_from = {}
-    exploration_frontier = []
-    step_counter = 0
+def greedy_bfs(grid, start, goal):
+    started = time.time()
+    priorityqueue, at, es, visited = [], {}, [], set()
+    counter = 0
+    priorityqueue.append((0, start))
+    visited.add(start)
 
-    heapq.heappush(open_nodes, (0, start))
-    visited_nodes.add(start)
+    while (priorityqueue):
+        priorityqueue.sort(key=lambda x: x[0])
+        cost, n = priorityqueue.pop(0)
+        temp = []
+        counter += 1
 
-    while open_nodes:
-        cost, current_node = heapq.heappop(open_nodes)
-        step_counter += 1
+        if (n == goal):
+            p = []
+            while (n in at):
+                p.append(n)
+                n = at[n]
+            p.append(start)
+            return p[::-1], es, counter, time.time() - started
 
-        if current_node == goal:
-            path = []
-            while current_node in path_from:
-                path.append(current_node)
-                current_node = path_from[current_node]
-            path.reverse()
+        x = n[0]
+        y = n[1]
 
-            return path, exploration_frontier, step_counter, time.time() - start_time
+        for di in DIRECTIONS:
+            nei_x = x + di[0]
+            nei_y = y + di[1]
+            nei = (nei_x, nei_y)
 
-        x, y = current_node
+            within_x = (0 <= nei_x < len(grid[0]))
+            within_y = (0 <= nei_y < len(grid))
 
-        # DIRECTIONS = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+            if (within_x and within_y):
+                is_walkable = grid[nei_y][nei_x] == 0
+                is_not_visited = nei not in visited
 
-        for dx, dy in DIRECTIONS:
-            neighbor_node = (x + dx, y + dy)
-            if (0 <= neighbor_node[0] < MAZE_WIDTH) and (0 <= neighbor_node[1] < MAZE_HEIGHT):
-                if maze[neighbor_node[1]][neighbor_node[0]] == 0 and neighbor_node not in visited_nodes:
-                    visited_nodes.add(neighbor_node)
-                    path_from[neighbor_node] = current_node
-                    heapq.heappush(open_nodes, (heuristic_manhattan(
-                        neighbor_node, goal), neighbor_node))
+                if (is_walkable and is_not_visited):
+                    visited.add(nei)
+                    at[nei] = n
+                    priorityqueue.append((distance_metric(nei, goal), nei))
 
-        exploration_frontier.append([node[1] for node in open_nodes])
+        for node in priorityqueue:
+            temp.append(node[-1])
+        es.append(temp)
 
-    return None, exploration_frontier, step_counter, time.time() - start_time
+    return None, es, counter, time.time() - started
 
 
-def a_star(maze, start, goal):
-    start_time = time.time()
+def a_star(grid, start, goal):
+    t = time.time()
+    priorityqueue, am, tc, pc, vl, tj = [], {}, {start: 0}, {
+        start: distance_metric(start, goal)}, set(), []
+    counter = 0
+    priorityqueue.append((0, start))
 
-    open_nodes = []
-    path_from = {}
-    g_cost = {start: 0}
-    f_cost = {start: abs(start[0] - goal[0]) + abs(start[1] - goal[1])}
-    visited_nodes = set()
-    exploration_frontier = []
-    step_counter = 0
+    while priorityqueue:
+        priorityqueue.sort(key=lambda x: x[0])
+        cost, n = priorityqueue.pop(0)
+        counter += 1
 
-    heapq.heappush(open_nodes, (0, start))
+        if n == goal:
+            p = []
+            while n in am:
+                p.append(n)
+                n = am[n]
+            p.append(start)
+            return p[::-1], tj, counter, time.time() - t
 
-    while open_nodes:
-        cost, current_node = heapq.heappop(open_nodes)
-        step_counter += 1
+        vl.add(n)
+        x = n[0]
+        y = n[1]
 
-        if current_node == goal:
-            path = []
-            while current_node in path_from:
-                path.append(current_node)
-                current_node = path_from[current_node]
-            path.reverse()
-            return path, exploration_frontier, step_counter, time.time() - start_time
+        for di in DIRECTIONS:
+            nei_x = x + di[0]
+            nei_y = y + di[1]
+            nei = (nei_x, nei_y)
 
-        visited_nodes.add(current_node)
+            within_x = 0 <= nei_x < len(grid[0])
+            within_y = 0 <= nei_y < len(grid)
 
-        x, y = current_node
+            if within_x and within_y:
+                is_walkable = grid[nei_y][nei_x] == 0
 
-        # DIRECTIONS = [(0, 1), (1, 0), (0, -1), (-1, 0)]
-        for dx, dy in DIRECTIONS:
-            neighbor_node = (x + dx, y + dy)
+                if is_walkable:
+                    ic = tc[n] + 1
+                    if nei not in vl or ic < tc.get(nei, float('inf')):
+                        am[nei] = n
+                        tc[nei] = ic
+                        pc[nei] = ic + distance_metric(nei, goal)
+                        priorityqueue.append((pc[nei], nei))
 
-            if 0 <= neighbor_node[0] < MAZE_WIDTH and 0 <= neighbor_node[1] < MAZE_HEIGHT:
-                if maze[neighbor_node[1]][neighbor_node[0]] == 0:
-                    tentative_g_cost = g_cost[current_node] + 1
+        temp = []
+        for i in priorityqueue:
+            temp.append(i[1])
+        tj.append(temp)
 
-                    if neighbor_node not in visited_nodes or tentative_g_cost < g_cost.get(neighbor_node, float('inf')):
-                        path_from[neighbor_node] = current_node
-                        g_cost[neighbor_node] = tentative_g_cost
-                        f_cost[neighbor_node] = tentative_g_cost + \
-                            heuristic_manhattan(neighbor_node, goal)
-                        heapq.heappush(
-                            open_nodes, (f_cost[neighbor_node], neighbor_node))
-
-        exploration_frontier.append([node[1] for node in open_nodes])
-    return None, exploration_frontier, step_counter, time.time() - start_time
+    return None, tj, counter, time.time() - t
