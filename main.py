@@ -18,6 +18,12 @@ maze = start_pos = goal_pos = path = step_count = 0
 
 def main():
     pygame.init()
+    pygame.mixer.init()
+    
+    pygame.mixer.music.load(r"C:\Users\Prof.Ashraf\source\repos\Trial_AI_15_11\Trial_AI_15_11\Environment\assets\01. Ground Theme.mp3")
+    pygame.mixer.music.set_volume(1)  
+    pygame.mixer.music.play(-1, 0.0) 
+
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Maze Solver")
 
