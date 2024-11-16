@@ -2,15 +2,14 @@ from Basic_Attributes import *
 
 def export_frontier(frontier , algorithm):
     dir = rf"{os.getcwd()}\Forntier Results" 
-
     if not os.path.exists(dir):
         os.mkdir(dir)
-    
     with open(os.path.join(dir, f"frontier_{algorithm}.txt"), "w") as f:
         for node in frontier:
             f.write(f"{node}\n")
             
 def showDifferences_ExecutionTime(compareAlgos):
+
     algos = list(compareAlgos.keys())
     times = [compareAlgos[algo][0] for algo in algos]
     steps = [compareAlgos[algo][1] for algo in algos]
