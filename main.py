@@ -2,8 +2,10 @@ from Basic_Attributes import *
 from Environment import mazeSetup, Buttons, comparewell
 from Searching_Algorithms import Uninformed_Search, Heuristic_Search, Local_Search
 
+
 def update_title(task):
     pygame.display.set_caption(f"Solving with {task} Algorithm")
+
 
 compareAlgos = {
     # [Time , Steps]
@@ -25,7 +27,7 @@ def main():
     pygame.mixer.init()
 
     pygame.mixer.music.load(r".\Environment\assets\01. Ground Theme.mp3")
-    pygame.mixer.music.set_volume(1)
+    pygame.mixer.music.set_volume(0.1)
     pygame.mixer.music.play(-1, 0.0)
 
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -39,7 +41,8 @@ def main():
         nonlocal path
         global step_count
         update_title("BFS")
-        path, frontier, step_count, elapsed_time = Uninformed_Search.bfs( maze, start_pos, goal_pos)
+        path, frontier, step_count, elapsed_time = Uninformed_Search.bfs(
+            maze, start_pos, goal_pos)
         comparewell.export_frontier(frontier, "BFS")
         compareAlgos['BFS'] = [elapsed_time, step_count]
 
@@ -47,7 +50,8 @@ def main():
         nonlocal path
         global step_count
         update_title("DFS")
-        path, frontier, step_count, elapsed_time = Uninformed_Search.dfs(maze, start_pos, goal_pos)
+        path, frontier, step_count, elapsed_time = Uninformed_Search.dfs(
+            maze, start_pos, goal_pos)
         comparewell.export_frontier(frontier, "DFS")
         compareAlgos['DFS'] = [elapsed_time, step_count]
 
@@ -57,7 +61,8 @@ def main():
         global l
 
         update_title("IDS")
-        path, frontier, step_count, elapsed_time = Uninformed_Search.ids(maze, start_pos, goal_pos, l)
+        path, frontier, step_count, elapsed_time = Uninformed_Search.ids(
+            maze, start_pos, goal_pos, l)
         comparewell.export_frontier(frontier, "IDS")
         compareAlgos["IDS"] = [elapsed_time, step_count]
 
@@ -65,7 +70,8 @@ def main():
         nonlocal path
         global step_count
         update_title("UCS")
-        path, frontier, step_count, elapsed_time = Uninformed_Search.ucs(maze, start_pos, goal_pos)
+        path, frontier, step_count, elapsed_time = Uninformed_Search.ucs(
+            maze, start_pos, goal_pos)
         comparewell.export_frontier(frontier, "UCS")
         compareAlgos['UCS'] = [elapsed_time, step_count]
 
@@ -73,7 +79,8 @@ def main():
         nonlocal path
         global step_count
         update_title("Hill Climbing")
-        path, frontier, step_count, elapsed_time = Local_Search.hill_climbing(maze, start_pos, goal_pos)
+        path, frontier, step_count, elapsed_time = Local_Search.hill_climbing(
+            maze, start_pos, goal_pos)
         comparewell.export_frontier(frontier, "Hill Climbing")
         compareAlgos['Hill Climbing'] = [elapsed_time, step_count]
 
@@ -95,7 +102,8 @@ def main():
 
         update_title("Greedy BFS")
 
-        path, frontier, step_count, elapsed_time = Heuristic_Search.greedy_bfs(maze, start_pos, goal_pos)
+        path, frontier, step_count, elapsed_time = Heuristic_Search.greedy_bfs(
+            maze, start_pos, goal_pos)
 
         comparewell.export_frontier(frontier, "Greedy BFS")
         compareAlgos['Greedy BFS'] = [elapsed_time, step_count]
@@ -105,7 +113,6 @@ def main():
         global step_count
 
         update_title("A Start")
-
 
         path, frontier, step_count, elapsed_time = Heuristic_Search.a_star(
             maze, start_pos, goal_pos)
