@@ -1,91 +1,90 @@
 from Basic_Attributes import *  
-from Environment import comparewell  , mazeSetup
+from Environment import comparewell, mazeSetup
 
-def heuristic_manhattan(node, goal):
-    return abs(node[0] - goal[0]) + abs(node[1] - goal[1])
+def distance_metric(a, b):
+    x = abs(a[0] - b[0])
+    y = abs(a[1] - b[1])
+    return x + y
 
-def greedy_bfs(maze, start, goal):
-    start_time = time.time()
-    open_nodes = []
-    visited_nodes = set()
-    path_from = {}
-    exploration_frontier = []  
-    step_counter = 0  
+def greedy_bfs(g, e, d):
+    started = time.time()
+    pq , at , es  , visited = [] , {} , [] , set()
+    counter = 0
 
-    heapq.heappush(open_nodes, (0, start))  
-    visited_nodes.add(start)
+    pq.append((0, e))
+    visited.add(e)
 
-    while open_nodes:
-        cost, current_node = heapq.heappop(open_nodes)  
-        step_counter += 1
+    while pq:
+        pq.sort(key=lambda x: x[0])  
+        c, n = pq.pop(0) 
+        temp = [] 
+        counter += 1
 
-        if current_node == goal:  
-            path = []
-            while current_node in path_from:
-                path.append(current_node)
-                current_node = path_from[current_node]
-            path.reverse()
+        if n == d:
+            p = []
+            while n in at:
+                p.append(n)
+                n = at[n]
+            p.append(e)
+            return p[::-1], es, counter, time.time() - started
 
-            return path, exploration_frontier, step_counter, time.time() - start_time 
+        x = n[0]
+        y = n[1]
 
-        x, y = current_node
+        for di in DIRECTIONS:
+            nei = (x + di[0], y + di[1])
+            if (0 <= nei[0] < len(g[0])) and (0 <= nei[1] < len(g)):
+                if (g[nei[1]][nei[0]] == 0) and (nei not in visited):
+                    visited.add(nei)
+                    at[nei] = n
+                    pq.append((distance_metric(nei, d), nei))
+        
+        for node in pq :
+            temp.append(node[-1])
+        es.append(temp)
 
-        # DIRECTIONS = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+    return None, es, counter, time.time() - started
 
-        for dx, dy in DIRECTIONS:
-            neighbor_node = (x + dx, y + dy)
-            if (0 <= neighbor_node[0] < MAZE_WIDTH) and (0 <= neighbor_node[1] < MAZE_HEIGHT):
-                if maze[neighbor_node[1]][neighbor_node[0]] == 0 and neighbor_node not in visited_nodes:
-                    visited_nodes.add(neighbor_node)  
-                    path_from[neighbor_node] = current_node  
-                    heapq.heappush(open_nodes, (heuristic_manhattan(neighbor_node , goal), neighbor_node))  
+def a_star(g, e, d):
+    t = time.time()
+    pq , am , tc , pc , vl , tj = [] , {} , {e:0}  , {e: distance_metric(e, d)} , set () , []
+    
+    counter = 0
 
-        exploration_frontier.append([node[1] for node in open_nodes])
+    pq.append((0, e))
 
-    return None, exploration_frontier, step_counter, time.time() - start_time 
+    while pq:
+        pq.sort(key=lambda x: x[0]) 
+        cost, n = pq.pop(0)  
+        counter += 1
 
-def a_star(maze, start, goal):
-    start_time = time.time()
+        if n == d:
+            p = []
+            while n in am:
+                p.append(n)
+                n = am[n]
+            p.append(e)
+            return p[::-1], tj, counter, time.time() - t
 
-    open_nodes = []
-    path_from = {}
-    g_cost = {start: 0}  
-    f_cost = {start: abs(start[0] - goal[0]) + abs(start[1] - goal[1])}  
-    visited_nodes = set()  
-    exploration_frontier = []  
-    step_counter = 0  
+        vl.add(n)
 
-    heapq.heappush(open_nodes, (0, start)) 
+        x = n[0]
+        y = n[1]
 
-    while open_nodes:
-        cost, current_node = heapq.heappop(open_nodes)  
-        step_counter += 1
+        for di in DIRECTIONS:
+            nei = (x + di[0], y + di[1])
 
-        if current_node == goal:  
-            path = []
-            while current_node in path_from:
-                path.append(current_node)
-                current_node = path_from[current_node]
-            path.reverse()  
-            return path, exploration_frontier, step_counter, time.time() - start_time
+            if (0 <= nei[0] < MAZE_WIDTH) and (0 <= nei[1] < MAZE_HEIGHT):
+                if g[nei[1]][nei[0]] == 0:
+                    ic = tc[n] + 1
+                    if (nei not in vl) or (ic < tc.get(nei, float('inf'))):
+                        am[nei] , tc[nei] = n , ic
+                        pc[nei] = ic + distance_metric(nei, d)
+                        pq.append((pc[nei], nei))
+        temp = []
+        for i in pq :
+            temp.append(i[1])
 
-        visited_nodes.add(current_node)  
+        tj.append(temp)
 
-        x, y = current_node
-
-        # DIRECTIONS = [(0, 1), (1, 0), (0, -1), (-1, 0)]
-        for dx, dy in DIRECTIONS:
-            neighbor_node = (x + dx, y + dy)
-
-            if 0 <= neighbor_node[0] < MAZE_WIDTH and 0 <= neighbor_node[1] < MAZE_HEIGHT:
-                if maze[neighbor_node[1]][neighbor_node[0]] == 0:  
-                    tentative_g_cost = g_cost[current_node] + 1  
-
-                    if neighbor_node not in visited_nodes or tentative_g_cost < g_cost.get(neighbor_node, float('inf')):
-                        path_from[neighbor_node] = current_node  
-                        g_cost[neighbor_node] = tentative_g_cost
-                        f_cost[neighbor_node] = tentative_g_cost + heuristic_manhattan(neighbor_node , goal)
-                        heapq.heappush(open_nodes, (f_cost[neighbor_node], neighbor_node))  
-
-        exploration_frontier.append([node[1] for node in open_nodes])
-    return None, exploration_frontier, step_counter, time.time() - start_time  
+    return None, tj, counter, time.time() - t
