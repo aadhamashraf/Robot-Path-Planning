@@ -1,6 +1,8 @@
 from Basic_Attributes import *
 
-# BFS Algorithm 
+# BFS Algorithm
+
+
 def bfs(maze, start, goal):
     startTime = time.time()
     visited = [[False] * MAZE_WIDTH for _ in range(MAZE_HEIGHT)]
@@ -9,10 +11,10 @@ def bfs(maze, start, goal):
 
     visited[start[1]][start[0]] = True
 
-    steps = 0     
+    steps = 0
     while queue:
         x, y = queue.popleft()
-        print(f"Exploring BFS: ({x}, {y})") 
+        print(f"Exploring BFS: ({x}, {y})")
         steps += 1
         # DIRECTIONS = [(0, 1), (1, 0), (0, -1), (-1, 0)]
         for dx, dy in DIRECTIONS:
@@ -29,10 +31,12 @@ def bfs(maze, start, goal):
                     x, y = parent[(x, y)]
                 path.append(start)
 
-                return path[::-1],queue,steps,endTime-startTime
+                return path[::-1], queue, steps, endTime-startTime
     return None
 
-# DFS Algorithm 
+# DFS Algorithm
+
+
 def dfs(maze, start, goal):
     startTime = time.time()
     stack = [start]
@@ -59,10 +63,12 @@ def dfs(maze, start, goal):
         path.append(current)
         current = parent[current]
     endTime = time.time()
-    return path[::-1], frontier, steps , endTime-startTime
+    return path[::-1], frontier, steps, endTime-startTime
 
 # IDS Algorithm
-def ids(maze, start, goal,l = 1):
+
+
+def ids(maze, start, goal, l=1):
     startTime = time.time()
     frontier = [start]
     parent = {start: None}
@@ -81,12 +87,12 @@ def ids(maze, start, goal,l = 1):
                 if (nx, ny) not in parent:
                     parent[(nx, ny)] = current
                     frontier.append((nx, ny))
-        l-=1
+        l -= 1
     path = []
-    
+
     while current != start:
         path.append(current)
         current = parent[current]
     endTime = time.time()
-    return path[::-1], frontier, steps , endTime-startTime
+    return path[::-1], frontier, steps, endTime-startTime
 # UCS Algorithm

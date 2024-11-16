@@ -1,8 +1,8 @@
 from collections import deque
 import heapq
 import pygame
-import random 
-import os 
+import random
+import os
 import time
 import matplotlib.pyplot as plt
 import math
@@ -14,7 +14,7 @@ CELL_SIZE = 20
 MAZE_WIDTH = SCREEN_WIDTH // CELL_SIZE - 10
 MAZE_HEIGHT = SCREEN_HEIGHT // CELL_SIZE
 
-# PreDefined Colors for the Whole Project 
+# PreDefined Colors for the Whole Project
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GREEN = (0, 255, 0)
@@ -25,7 +25,7 @@ BUTTON_HOVER_COLOR = (50, 50, 200)
 
 DIRECTIONS = [(0, 1), (1, 0), (0, -1), (-1, 0)]
 
-# Buttons Settings 
+# Buttons Settings
 button_x = 1340
 button_y = 10
 button_width = 120

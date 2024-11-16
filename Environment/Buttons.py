@@ -1,10 +1,11 @@
 from Basic_Attributes import *
 
+
 class Button:
     def __init__(self, x, y, width, height, text, subtext=None, action=None):
         self.rect = pygame.Rect(x, y, width, height)
         self.text = text
-        self.subtext = subtext if subtext is not None else "" 
+        self.subtext = subtext if subtext is not None else ""
         self.action = action
 
     def draw(self, screen, hover=False):
@@ -15,10 +16,10 @@ class Button:
         label_rect = label.get_rect(center=self.rect.center)
         screen.blit(label, label_rect)
 
-      
-        if self.subtext:  
+        if self.subtext:
             subtext_label = font.render(self.subtext, True, (255, 255, 255))
-            subtext_rect = subtext_label.get_rect(center=(self.rect.centerx, self.rect.centery + 20))  
+            subtext_rect = subtext_label.get_rect(
+                center=(self.rect.centerx, self.rect.centery + 20))
             screen.blit(subtext_label, subtext_rect)
 
     def is_hover(self, pos):
@@ -27,4 +28,3 @@ class Button:
     def click(self):
         if self.action:
             self.action()
-
