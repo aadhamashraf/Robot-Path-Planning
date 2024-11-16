@@ -3,18 +3,18 @@ from Environment import mazeSetup, Buttons, comparewell
 from Searching_Algorithms import Uninformed_Search , Heuristic_Search , Local_Search
 
 compareAlgos = {
-    "BFS": 0,
-    "DFS": 0,
-    "UCS": 0,
-    "IDS": 0,
-    "Greedy BFS": 0,
-    "A Star": 0,
-    "Hill Climbing Stairs": 0,
-    "Simulated Annealing": 0,
-    "Genetic Algos": 0
+    # [Time , Steps]
+    "BFS": [0 , 0],
+    "DFS": [0 , 0],
+    "UCS": [0 , 0],
+    "IDS": [0 , 0],
+    "Greedy BFS": [0 , 0],
+    "A Star": [0 , 0],
+    "Hill Climbing Stairs": [0 , 0],
+    "Simulated Annealing": [0 , 0],
+    "Genetic Algos": [0 , 0]
 }
-
-maze = start_pos = goal_pos = path = step_count = l = 0
+maze = start_pos = goal_pos = path = step_count = elapsed_time = l = 0
 
 def main():
     pygame.init()
@@ -28,31 +28,42 @@ def main():
     pygame.display.set_caption("Robot Path Navigator")
 
     maze, start_pos, goal_pos = mazeSetup.create_maze()
-    print(maze)
+    # print(maze)
     path = None
 
     def solve_bfs():
         nonlocal path
         global step_count
+        
         print("Solving with BFS...")
+        
         path , frontier, step_count, elapsed_time = Uninformed_Search.bfs(maze, start_pos, goal_pos)
-        compareAlgos['BFS'] = elapsed_time
+        comparewell.export_frontier(frontier, "BFS")
+        compareAlgos['BFS'] = [elapsed_time, step_count]
+
     
     def solve_dfs():
         nonlocal path
         global step_count
+        
         print("Solving with DFS...")
-        path, frontier, step_count, timetaken = Uninformed_Search.dfs(maze, start_pos, goal_pos)
+       
+        path, frontier, step_count, elapsed_time = Uninformed_Search.dfs(maze, start_pos, goal_pos)
         comparewell.export_frontier(frontier, "DFS")
-        compareAlgos["DFS"] = timetaken
+        compareAlgos['DFS'] = [elapsed_time, step_count]
+
+        
     def solve_ids():
         nonlocal path
         global step_count
         global l
+        
         print("Solving with DFS...")
-        path, frontier, step_count, timetaken = Uninformed_Search.ids(maze, start_pos, goal_pos, l)
-        comparewell.export_frontier(frontier, "DFS")
-        compareAlgos["IDS"] = timetaken
+        
+        path, frontier, step_count, elapsed_time = Uninformed_Search.ids(maze, start_pos, goal_pos, l)
+        comparewell.export_frontier(frontier, "IDS")
+        compareAlgos["IDS"] = [elapsed_time , step_count]
+        
     def increaseL():
         global l
         l+=5
@@ -62,21 +73,27 @@ def main():
         if l > 0:
             l-=5 
         solve_ids()
+        
     def solve_greedy_BFS():
         print("Solving with Greedy BFS...")
         nonlocal path
         global step_count
+        
         path , frontier, step_count, elapsed_time = Heuristic_Search.greedy_bfs(maze, start_pos, goal_pos)
-        compareAlgos['Greedy BFS'] = elapsed_time
+        
+        comparewell.export_frontier(frontier, "Greedy BFS")
+        compareAlgos['Greedy BFS'] = [elapsed_time , step_count]
 
     def solve_Astar():
         nonlocal path
         global step_count
+        
         print("Solving with A*...")
+        
         path , frontier, step_count, elapsed_time = Heuristic_Search.a_star(maze, start_pos, goal_pos)
-        compareAlgos['A Star'] = elapsed_time
-
-    
+        comparewell.export_frontier(frontier, "A Star")
+        compareAlgos['A Star'] = [elapsed_time , step_count]
+        
     def reset_path():
         nonlocal path
         path = None  
