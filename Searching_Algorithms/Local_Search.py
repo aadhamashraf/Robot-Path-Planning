@@ -1,19 +1,16 @@
-<<<<<<< HEAD
 import math
 import random
 import time
+from Basic_Attributes import *
 DIRECTIONS = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-=======
-from Basic_Attributes import * 
->>>>>>> 13dae46523ddcaa7a8216d4c3bff890f40393ea4
 
 """Hill Climbing"""
 
-"""Simualted Annealing"""
-
-<<<<<<< HEAD
+"""Simulated Annealing"""
 
 # Probability function
+
+
 def probability(deltaE, T):
     k = 1e-2  # Boltzmann constant
     return math.exp(-deltaE / (k * T))
@@ -68,6 +65,4 @@ def simulated_annealing(start, goal, grid, n_iterations=1000, temp=1000):
     return path[::-1], frontier, steps, end_time - start_time
 
 
-=======
->>>>>>> 13dae46523ddcaa7a8216d4c3bff890f40393ea4
 """Genetic Algorithms"""
