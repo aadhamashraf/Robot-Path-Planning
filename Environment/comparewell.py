@@ -11,9 +11,8 @@ def export_frontier(frontier, algorithm):
 
 
 def showDifferences_ExecutionTime(compareAlgos):
-
     algos = list(compareAlgos.keys())
-    times = [compareAlgos[algo][0]/60 for algo in algos]
+    times = [compareAlgos[algo][0] for algo in algos]
     steps = [compareAlgos[algo][1] for algo in algos]
 
     time_sorted_indices = sorted(
@@ -25,6 +24,7 @@ def showDifferences_ExecutionTime(compareAlgos):
         range(len(steps)), key=lambda i: steps[i], reverse=True)
     sorted_algos_by_steps = [algos[i] for i in step_sorted_indices]
     sorted_steps = [steps[i] for i in step_sorted_indices]
+
 
     fig, axs = plt.subplots(1, 2, figsize=(12, 6), constrained_layout=True)
 
