@@ -45,7 +45,7 @@ def create_maze():
             return maze, start, goal
 
 
-def draw_maze(screen, maze, start, goal, path=None):
+def draw_grid(screen, maze, start, goal, path=None):
     for y in range(MAZE_HEIGHT):
         for x in range(MAZE_WIDTH):
             if maze[y][x] == 1:

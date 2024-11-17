@@ -2,17 +2,7 @@ from Basic_Attributes import *
 from Environment import comparewell, mazeSetup
 
 
-# def manhattan_metric(a, b):
-#     x = abs(a[0] - b[0])
-#     y = abs(a[1] - b[1])
-#     return x + y
-
-# def eclduien_metric(a, b):
-#     x = pow(a[0] - b[0] , 2)
-#     y = pow(a[1] - b[1] , 2)
-#     return math.sqrt(x + y)
-
-def greedy_bfs(grid, start, goal , metric):
+def greedy_bfs(grid, start, goal, metric):
     started = time.time()
     priorityqueue, at, es, visited = [], {}, [], set()
     counter = 0
@@ -60,7 +50,7 @@ def greedy_bfs(grid, start, goal , metric):
     return None, es, counter, time.time() - started
 
 
-def a_star(grid, start, goal , metric):
+def a_star(grid, start, goal, metric):
     t = time.time()
     priorityqueue, am, tc, pc, vl, tj = [], {}, {start: 0}, {
         start: metric(start, goal)}, set(), []
