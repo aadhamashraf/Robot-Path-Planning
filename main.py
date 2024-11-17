@@ -100,7 +100,7 @@ def main():
         global step_count
         update_title(f"A* ({metric_name})")
         path, frontier, step_count, elapsed_time = Heuristic_Search.a_star(maze, start_pos, goal_pos, metric)
-        comparewell.export_frontier(frontier, f"A* ({metric_name})")
+        comparewell.export_frontier(frontier, f"A Star ({metric_name})")
         compareAlgos[f"A* ({metric_name})"] = [elapsed_time, step_count]
 
     def solve_hill_climbing():
