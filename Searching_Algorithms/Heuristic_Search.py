@@ -2,13 +2,17 @@ from Basic_Attributes import *
 from Environment import comparewell, mazeSetup
 
 
-def distance_metric(a, b):
-    x = abs(a[0] - b[0])
-    y = abs(a[1] - b[1])
-    return x + y
+# def manhattan_metric(a, b):
+#     x = abs(a[0] - b[0])
+#     y = abs(a[1] - b[1])
+#     return x + y
 
+# def eclduien_metric(a, b):
+#     x = pow(a[0] - b[0] , 2)
+#     y = pow(a[1] - b[1] , 2)
+#     return math.sqrt(x + y)
 
-def greedy_bfs(grid, start, goal):
+def greedy_bfs(grid, start, goal , metric):
     started = time.time()
     priorityqueue, at, es, visited = [], {}, [], set()
     counter = 0
@@ -47,7 +51,7 @@ def greedy_bfs(grid, start, goal):
                 if (is_walkable and is_not_visited):
                     visited.add(nei)
                     at[nei] = n
-                    priorityqueue.append((distance_metric(nei, goal), nei))
+                    priorityqueue.append((metric(nei, goal), nei))
 
         for node in priorityqueue:
             temp.append(node[-1])
@@ -56,10 +60,10 @@ def greedy_bfs(grid, start, goal):
     return None, es, counter, time.time() - started
 
 
-def a_star(grid, start, goal):
+def a_star(grid, start, goal , metric):
     t = time.time()
     priorityqueue, am, tc, pc, vl, tj = [], {}, {start: 0}, {
-        start: distance_metric(start, goal)}, set(), []
+        start: metric(start, goal)}, set(), []
     counter = 0
     priorityqueue.append((0, start))
 
@@ -96,7 +100,7 @@ def a_star(grid, start, goal):
                     if nei not in vl or ic < tc.get(nei, float('inf')):
                         am[nei] = n
                         tc[nei] = ic
-                        pc[nei] = ic + distance_metric(nei, goal)
+                        pc[nei] = ic + metric(nei, goal)
                         priorityqueue.append((pc[nei], nei))
 
         temp = []
