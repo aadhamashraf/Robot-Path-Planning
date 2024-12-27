@@ -1,6 +1,6 @@
 import pygame
 from src.core.metrics import Metrics
-from src.environment.mazeSetup import draw_grid
+import src.environment.mazeSetup as maze_setup
 
 
 class GameWindow:

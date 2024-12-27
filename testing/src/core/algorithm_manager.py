@@ -20,8 +20,20 @@ class AlgorithmManager:
         }
 
     def solve_algorithm(self, algorithm_name, algorithm_func, *args):
-        self.game_state.path, frontier, self.game_state.step_count, elapsed_time = algorithm_func(
-            self.game_state.maze, self.game_state.start_pos, self.game_state.goal_pos, *args)
-        self.frontier_exporter.export_frontier(frontier, algorithm_name)
-        self.compare_algos[algorithm_name] = [
-            elapsed_time, self.game_state.step_count]
+        if hasattr(algorithm_func, '__self__'):  # Check if it's a bound method (instance method)
+            instance = algorithm_func.__self__
+            result = instance.search(*args)
+        else:  # Else it's a function (such as ids)
+            result = algorithm_func(
+                self.game_state.maze, self.game_state.start_pos, self.game_state.goal_pos, *args)
+
+        if result is not None:
+            self.game_state.path, frontier, self.game_state.step_count, elapsed_time = result
+            self.frontier_exporter.export_frontier(frontier, algorithm_name)
+            self.compare_algos[algorithm_name] = [
+                elapsed_time, self.game_state.step_count]
+
+        else:
+            self.game_state.path = None
+            self.game_state.step_count = 0
+            self.compare_algos[algorithm_name] = [0, 0]

@@ -2,13 +2,14 @@ from src.algorithms.base_search import BaseSearch
 
 
 class IterativeDeepeningSearch(BaseSearch):
-    def search(self, depth_limit=1):
+    def search(self, game_state, depth_limit=1):
         self._start_timer()
         frontier = [self.start]
         parent = {self.start: None}
+        l = game_state.l  # Get l value from gamestate
 
         current = self.start
-        while frontier and depth_limit > 0:
+        while frontier and l > 0:
             current = frontier.pop()
             self.counter += 1
 
@@ -20,8 +21,8 @@ class IterativeDeepeningSearch(BaseSearch):
                 if self._is_valid_position(nx, ny) and (nx, ny) not in parent:
                     parent[(nx, ny)] = current
                     frontier.append((nx, ny))
-            depth_limit -= 1
-
+            l -= 1
+        game_state.l += 1
         return None, frontier, self.counter, self._get_elapsed_time()
 
     def _reconstruct_path(self, parent, current):
