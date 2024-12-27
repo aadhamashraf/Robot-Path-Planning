@@ -1,5 +1,6 @@
 import pygame
 from src.core.metrics import Metrics
+from src.environment.mazeSetup import draw_grid
 
 
 class GameWindow:
@@ -16,7 +17,7 @@ class GameWindow:
 
     def _setup_audio(self):
         pygame.mixer.music.load(
-            r".\\Environment\\assets\\01. Ground Theme.mp3")
+            r"C:\\Users\\Hozien\Desktop\\UST-CSAI\\Year 3 Semester 1\\CSAI 301 AI\\Project\AI-FL24-GP\\testing\src\\environment\\assets\\01. Ground Theme.mp3")
         pygame.mixer.music.set_volume(0.1)
         pygame.mixer.music.play(-1, 0.0)
 

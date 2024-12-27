@@ -1,6 +1,7 @@
 from Basic_Attributes import *
-from Environment import mazeSetup, Buttons, comparewell
+from Environment import Buttons, comparewell
 from Searching_Algorithms import Uninformed_Search, Heuristic_Search, Local_Search
+from testing.src.environment import mazeSetup
 
 
 def manhattan_metric(a, b):

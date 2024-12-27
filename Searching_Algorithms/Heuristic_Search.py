@@ -1,5 +1,6 @@
 from Basic_Attributes import *
-from Environment import comparewell, mazeSetup
+from Environment import comparewell
+from testing.src.environment import mazeSetup
 
 
 def greedy_bfs(grid, start, goal, metric):

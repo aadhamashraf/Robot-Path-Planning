@@ -1,9 +1,9 @@
-from Basic_Attributes import *
-from Searching_Algorithms import Uninformed_Search
+from src.utilities.constants import *
+from src.algorithms.uninformed import bfs
 
 
 def is_solvable(maze, start, goal):
-    return True if Uninformed_Search.bfs(maze, start, goal) else False
+    return True if bfs(maze, start, goal) else False
 
 
 def create_maze():
