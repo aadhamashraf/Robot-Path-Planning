@@ -1,5 +1,3 @@
-![image](https://github.com/user-attachments/assets/c0925f4e-4f4c-4f5c-93b7-7794e069c228)
-
 # AI Maze Solver Project
 
 This project implements various pathfinding algorithms to solve mazes. It provides a graphical user interface (GUI) to visualize the maze, the solution path, and a comparison of different algorithms.
@@ -81,6 +79,3 @@ The project allows users to:
 2.  Clone the repository.
 3.  Navigate to the project directory.
 4.  Run the `main.py` file using: `python main.py`.
-
-## Contact
-If you have any questions, feel free to reach out.
