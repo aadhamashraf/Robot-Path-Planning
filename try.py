@@ -65,5 +65,9 @@ def main():
     print(f"Total Wins: {wins}")
   
   # Consider RUNNING down the method of visualizing the performance once the Q-learning training terminates 
+'''
+    def log_performance(self, reward, steps):
+    def plot_metrics(self):
+'''
 if __name__ == "__main__":
     main()
