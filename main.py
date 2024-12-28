@@ -29,61 +29,71 @@ from src.algorithms.genetic_algorithm import genetic_algorithm
 from src.core.metrics import Metrics
 from src.algorithms.q_learning_algorithm import q_learning  # Import QLearning
 import threading
-import queue
+import numpy as np
 
-plot_queue = queue.Queue()
-
-
-def plot_metrics_main_thread(reward_history, steps_history):
-    for idx, (metric, title, ylabel) in enumerate([(reward_history, "Rewards Over Episodes", "Rewards"), (steps_history, "Steps Over Episodes", "Steps")]):
-        plt.subplot(1, 2, idx + 1)
-        plt.plot(metric)
-        plt.title(title)
-        plt.xlabel("Episodes")
-        plt.ylabel(ylabel)
-    plt.show()
+size = 4
+grid = np.array([[1, 1, 1, 1],
+                 [1, 0, 1, 0],
+                 [1, 1, 1, 0],
+                 # The Goal State Also is Fixed here as 2 This wil be also changed
+                 [0, 1, 1, 2]])
 
 
-def train_q_learning(game_state: GameState):
-    ql = q_learning.QLearning(
-        size=min(MAZE_WIDTH, MAZE_HEIGHT), maze=game_state.maze)
+def print_grid(grid, agent_pos):
+    for r, row in enumerate(grid):
+        print(" ".join("A" if (r, c) == agent_pos else ("X" if cell == 0 else (
+            "G" if cell == 2 else ".")) for c, cell in enumerate(row)))
+    print("\n")
 
-    episodes = 500  # You can adjust this value
-    steps_per_episode = 200  # Adjust as needed
-    for episode in range(episodes):
-        state = (
-            game_state.start_pos[1] * min(MAZE_WIDTH, MAZE_HEIGHT)) + game_state.start_pos[0]
-        epsilon = ql.get_epsilon(episode)
-        total_reward, steps = 0, 0
 
-        for step in range(steps_per_episode):
-            action = ql.take_action(state, epsilon)
-            new_pos = list(game_state.start_pos)
-            new_pos[0] += DIRECTIONS[action][0]
-            new_pos[1] += DIRECTIONS[action][1]
-            reward = -1
-            new_state = state
-            if (new_pos[0] < 0 or new_pos[0] > min(MAZE_WIDTH, MAZE_HEIGHT) - 1 or new_pos[1] < 0 or new_pos[1] > min(MAZE_WIDTH, MAZE_HEIGHT) - 1):
-                reward = -5
-                new_state = state
-            else:
-                new_state = (new_pos[1] * min(MAZE_WIDTH,
-                             MAZE_HEIGHT)) + new_pos[0]
+def train_q_learning():
+    QL = q_learning.QLearning(size)
+    # As we randomly intitate the agent position, for now it will start from 0 , 0
+    agent_pos = (0, 0)
+    episode, wins = 0, 0
+    max_steps, max_episodes = 99, 10000
 
-                if tuple(new_pos) == game_state.goal_pos:
-                    reward = 10
-                    new_state = state
+# This is the training phase. It should be triggered when the button is clicked
+    while episode < max_episodes:
+        epsilon = QL.get_epsilon(episode)
+        if episode % 1000 == 0:
+            print(f"Episode: {episode}, Epsilon: {epsilon}")
 
-                state = new_state
+        agent_pos = (0, 0)
+        steps = 0
 
-            ql.update_q(state, action, reward, new_state)
-            total_reward += reward
+        while steps < max_steps:
+            print(f"Episode {episode}, Step {steps}")
+            print_grid(grid, agent_pos)
+
+            state = size * agent_pos[0] + agent_pos[1]
+            action = QL.take_action(state, epsilon)
+
+            dr, dc = DIRECTIONS[action]
+            new_pos = (agent_pos[0] + dr, agent_pos[1] + dc)
+
+            if 0 <= new_pos[0] < size and 0 <= new_pos[1] < size and grid[new_pos[0]][new_pos[1]] != 0:
+                agent_pos = new_pos
+
             steps += 1
-            if tuple(new_pos) == game_state.goal_pos:
-                break
 
-        ql.log_performance(total_reward, steps)
-    plot_queue.put((ql.reward_history, ql.steps_history))
+            if grid[agent_pos[0]][agent_pos[1]] == 0:
+                reward = -1
+                break
+            elif grid[agent_pos[0]][agent_pos[1]] == 2:
+                reward = 1
+                wins += 1
+                break
+            else:
+                reward = 0
+
+            next_state = size * agent_pos[0] + agent_pos[1]
+            QL.update_q_table(state, action, reward, next_state)
+
+        episode += 1
+
+    print(f"Q-table after training: \n{QL.q_table}")
+    print(f"Total Wins: {wins}")
 
 
 def main():
@@ -100,7 +110,7 @@ def main():
         BUTTON_X, BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT, BUTTON_GAP
     )
     game_window = GameWindow(
-        SCREEN_WIDTH, SCREEN_HEIGHT, button_manager, game_state, mazeSetup, plot_queue, plot_metrics_main_thread
+        SCREEN_WIDTH, SCREEN_HEIGHT, button_manager, game_state, mazeSetup
     )
 
     # Function to solve maze with the algo and set ui and gamestate values
@@ -239,7 +249,7 @@ def main():
         "Q-Learning",
         14,
         action=lambda: threading.Thread(
-            target=train_q_learning, args=(game_state,)).start(),
+            target=train_q_learning).start(),
     )
 
     # Setup initial game state
