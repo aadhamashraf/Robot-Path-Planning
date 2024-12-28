@@ -22,6 +22,7 @@ def main():
     episode, wins = 0, 0
     max_steps, max_episodes = 99, 10000
 
+ # This is the training phase. It should be triggered when the button is clicked
     while episode < max_episodes:
         epsilon = q_learning.get_epsilon(episode)
         if episode % 1000 == 0:
@@ -62,6 +63,7 @@ def main():
 
     print(f"Q-table after training: \n{q_learning.q_table}")
     print(f"Total Wins: {wins}")
-
+  
+  # Consider RUNNING down the method of visualizing the performance once the Q-learning training terminates 
 if __name__ == "__main__":
     main()
