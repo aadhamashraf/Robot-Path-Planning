@@ -6,7 +6,7 @@ size = 4
 grid = np.array([[1, 1, 1, 1],
                  [1, 0, 1, 0],
                  [1, 1, 1, 0],
-                 [0, 1, 1, 2]])
+                 [0, 1, 1, 2]]) # The Goal State Also is Fixed here as 2 This wil be also changed 
 
 
 def print_grid(grid, agent_pos):
