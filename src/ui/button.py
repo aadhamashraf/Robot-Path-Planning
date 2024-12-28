@@ -19,7 +19,8 @@ class Button:
         if self.subtext:
             subtext_label = font.render(self.subtext, True, (255, 255, 255))
             subtext_rect = subtext_label.get_rect(
-                center=(self.rect.centerx, self.rect.centery + 20))
+                center=(self.rect.centerx, self.rect.centery + 10)
+            )
             screen.blit(subtext_label, subtext_rect)
 
     def is_hover(self, pos):

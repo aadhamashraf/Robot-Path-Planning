@@ -11,10 +11,14 @@ class ButtonManager:
         self.button_height = button_height
         self.button_gap = button_gap
 
-    def add_button(self, text, y_offset, width_offset=0, action=None, subtext=None):
+    def add_button(
+        self, text, y_offset, width_offset=0, action=None, subtext=None, btn_width=0
+    ):
         x = self.button_x + width_offset
         y = self.button_y + y_offset * (self.button_height + self.button_gap)
         width = self.button_width - width_offset
+        if btn_width > 0:
+            width = btn_width
         button = Button(x, y, width, self.button_height, text, subtext, action)
         self.buttons.append(button)
         return button

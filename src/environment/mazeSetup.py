@@ -29,8 +29,9 @@ def create_maze():
             if neighbors:
                 next_x, next_y = random.choice(neighbors)
                 maze[next_y][next_x] = 0
-                maze[current_y + (next_y - current_y) //
-                     2][current_x + (next_x - current_x) // 2] = 0
+                maze[current_y + (next_y - current_y) // 2][
+                    current_x + (next_x - current_x) // 2
+                ] = 0
                 stack.append((next_x, next_y))
             else:
                 stack.pop()
@@ -58,11 +59,24 @@ def draw_grid(screen, maze, start, goal, path=None):
 
     robot_img = pygame.transform.scale(robot_img, (40, 40))
     flag_img = pygame.transform.scale(flag_img, (40, 40))
-    screen.blit(robot_img, (start[0] * CELL_SIZE + (CELL_SIZE - 40) //
-                2, start[1] * CELL_SIZE + (CELL_SIZE - 40) // 2))
-    screen.blit(flag_img, (goal[0] * CELL_SIZE + (CELL_SIZE - 40) //
-                2, goal[1] * CELL_SIZE + (CELL_SIZE - 40) // 2))
+    screen.blit(
+        robot_img,
+        (
+            start[0] * CELL_SIZE + (CELL_SIZE - 40) // 2,
+            start[1] * CELL_SIZE + (CELL_SIZE - 40) // 2,
+        ),
+    )
+    screen.blit(
+        flag_img,
+        (
+            goal[0] * CELL_SIZE + (CELL_SIZE - 40) // 2,
+            goal[1] * CELL_SIZE + (CELL_SIZE - 40) // 2,
+        ),
+    )
     if path:
-        for (x, y) in path:
-            pygame.draw.rect(screen, GREEN, (x * CELL_SIZE,
-                             y * CELL_SIZE, CELL_SIZE - 5, CELL_SIZE - 5))
+        for x, y in path:
+            pygame.draw.rect(
+                screen,
+                GREEN,
+                (x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE - 5, CELL_SIZE - 5),
+            )
