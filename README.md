@@ -77,7 +77,8 @@ The project allows users to:
 
 ## How to Run
 
-1.  Make sure you have Python 3.6+ installed along with `pygame`, `matplotlib`, `numpy`.
-2.  Clone the repository.
-3.  Navigate to the project directory.
+
+1.  Clone the repository `git clone https://github.com/aadhamashraf/AI-FL24-GP.git`.
+2.  Navigate to the project directory `cd <project-directory>`.
+3.  Ensure you have Python 3.6+ installed. Then, install the required libraries by running `pip install -r requirements.txt`
 4.  Run the `main.py` file using: `python main.py`.
