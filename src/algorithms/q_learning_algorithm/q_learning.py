@@ -1,4 +1,3 @@
-# src/algorithms/q_learning_algorithm/q_learning.py
 import numpy as np
 import random
 import time
@@ -19,7 +18,7 @@ class QLearning(BaseSearch):
         self.episode = 0
         self.wins = 0
         self.max_steps = MAZE_HEIGHT * MAZE_WIDTH
-        self.max_episodes = 15000  # Increased max episodes
+        self.max_episodes = 15000 
         self.epsilon = 0
 
     def search(self):
@@ -34,7 +33,6 @@ class QLearning(BaseSearch):
             steps = 0
 
             while steps < self.max_steps:
-                # Convert the position to the state
                 state = self.size * current[1] + current[0]
                 action = self._take_action(state, self.epsilon)
                 dr, dc = DIRECTIONS[action]
@@ -58,7 +56,6 @@ class QLearning(BaseSearch):
                 self._update_q_table(state, action, reward, next_state)
 
             self.episode += 1
-            # Reset the current position to the default maze position
             self.start = self.start
 
         print(f"Q-table after training: \n{self.q_table}")
