@@ -1,3 +1,4 @@
+# src/core/algorithm_manager.py
 from src.core.metrics import Metrics
 
 
@@ -16,7 +17,8 @@ class AlgorithmManager:
             "A* (Euclidean)": [0, 0],
             "Hill Climbing": [0, 0],
             "Simulated Annealing": [0, 0],
-            "Genetic Algorithm": [0, 0]
+            "Genetic Algorithm": [0, 0],
+            "Q-Learning": [0, 0]
         }
 
     def solve_algorithm(self, algorithm_name, algorithm_func, *args):

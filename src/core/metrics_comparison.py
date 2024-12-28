@@ -6,8 +6,10 @@ plt.style.use('dark_background')
 
 def showDifferences_ExecutionTime(compareAlgos):
     algos = list(compareAlgos.keys())
-    times = [compareAlgos[algo][0] for algo in algos]
-    steps = [compareAlgos[algo][1]/100 for algo in algos]
+    times = [compareAlgos[algo][0] if compareAlgos[algo]
+             [0] else 0 for algo in algos]
+    steps = [compareAlgos[algo][1]/100 if compareAlgos[algo]
+             [1] else 0 for algo in algos]
 
     time_sorted_indices = sorted(
         range(len(times)), key=lambda i: times[i], reverse=True)
