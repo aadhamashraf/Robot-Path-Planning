@@ -31,40 +31,57 @@ from src.algorithms.q_learning_algorithm import q_learning  # Import QLearning
 import threading
 import numpy as np
 
-size = 4
-grid = np.array([[1, 1, 1, 1],
-                 [1, 0, 1, 0],
-                 [1, 1, 1, 0],
-                 # The Goal State Also is Fixed here as 2 This wil be also changed
-                 [0, 1, 1, 2]])
+# size = 4
+# grid = np.array(
+#     [
+#         [1, 1, 1, 1],
+#         [1, 0, 1, 0],
+#         [1, 1, 1, 0],
+#         # The Goal State Also is Fixed here as 2 This wil be also changed
+#         [0, 1, 1, 2],
+#     ]
+# )
 
 
-def print_grid(grid, agent_pos):
-    for r, row in enumerate(grid):
-        print(" ".join("A" if (r, c) == agent_pos else ("X" if cell == 0 else (
-            "G" if cell == 2 else ".")) for c, cell in enumerate(row)))
-    print("\n")
+# def print_grid(grid, agent_pos):
+#     for r, row in enumerate(grid):
+#         print(
+#             " ".join(
+#                 (
+#                     "A"
+#                     if (r, c) == agent_pos
+#                     else ("X" if cell == 0 else ("G" if cell == 2 else "."))
+#                 )
+#                 for c, cell in enumerate(row)
+#             )
+#         )
+#     print("\n")
 
 
-def train_q_learning():
+def train_q_learning(
+    gamestate: GameState,
+):
+    size = len(gamestate.maze)
     QL = q_learning.QLearning(size)
     # As we randomly intitate the agent position, for now it will start from 0 , 0
-    agent_pos = (0, 0)
+    grid = gamestate.maze
+    grid[gamestate.goal_pos[1]][gamestate.goal_pos[0]] = 2
+    agent_pos = gamestate.start_pos
     episode, wins = 0, 0
     max_steps, max_episodes = 99, 10000
 
-# This is the training phase. It should be triggered when the button is clicked
+    # This is the training phase. It should be triggered when the button is clicked
     while episode < max_episodes:
         epsilon = QL.get_epsilon(episode)
         if episode % 1000 == 0:
             print(f"Episode: {episode}, Epsilon: {epsilon}")
 
-        agent_pos = (0, 0)
+        agent_pos = gamestate.start_pos
         steps = 0
 
         while steps < max_steps:
             print(f"Episode {episode}, Step {steps}")
-            print_grid(grid, agent_pos)
+            # print_grid(grid, agent_pos)
 
             state = size * agent_pos[0] + agent_pos[1]
             action = QL.take_action(state, epsilon)
@@ -72,7 +89,11 @@ def train_q_learning():
             dr, dc = DIRECTIONS[action]
             new_pos = (agent_pos[0] + dr, agent_pos[1] + dc)
 
-            if 0 <= new_pos[0] < size and 0 <= new_pos[1] < size and grid[new_pos[0]][new_pos[1]] != 0:
+            if (
+                0 <= new_pos[0] < size
+                and 0 <= new_pos[1] < size
+                and grid[new_pos[0]][new_pos[1]] != 0
+            ):
                 agent_pos = new_pos
 
             steps += 1
@@ -119,10 +140,10 @@ def main():
         game_state.reset_path()
         if algorithm_name == "IDS":
             algorithm_manager.solve_algorithm(
-                algorithm_name, algorithm_func, game_state)
+                algorithm_name, algorithm_func, game_state
+            )
         else:
-            algorithm_manager.solve_algorithm(
-                algorithm_name, algorithm_func, *args)
+            algorithm_manager.solve_algorithm(algorithm_name, algorithm_func, *args)
 
     # Function to create an instance of class and then pass the search to lambda function
     def create_algorithm_and_solve(algorithm_class, algorithm_name, *args):
@@ -165,16 +186,16 @@ def main():
         "-",
         3,
         btn_width=L_BUTTON_WIDTH,
-        action=lambda: game_state.l_setter(
-            game_state.l - 5) or ids_button.set_subtext(game_state.l),
+        action=lambda: game_state.l_setter(game_state.l - 5)
+        or ids_button.set_subtext(game_state.l),
     )
     button_manager.add_button(
         "+",
         3,
         btn_width=L_BUTTON_WIDTH,
         width_offset=L_BUTTON_WIDTH * 2,
-        action=lambda: game_state.l_setter(
-            game_state.l + 5) or ids_button.set_subtext(game_state.l),
+        action=lambda: game_state.l_setter(game_state.l + 5)
+        or ids_button.set_subtext(game_state.l),
     )
 
     # Reset path and reset maze buttons
@@ -219,8 +240,7 @@ def main():
     button_manager.add_button(
         "Hill Climbing",
         8,
-        action=create_algorithm_and_solve(
-            hill_climbing.HillClimbing, "Hill Climbing"),
+        action=create_algorithm_and_solve(hill_climbing.HillClimbing, "Hill Climbing"),
     )
     button_manager.add_button(
         "Simulated Annealing",
@@ -241,15 +261,15 @@ def main():
     button_manager.add_button(
         "Compare Algos",
         13,
-        action=lambda: showDifferences_ExecutionTime(
-            algorithm_manager.compare_algos),
+        action=lambda: showDifferences_ExecutionTime(algorithm_manager.compare_algos),
     )
 
     button_manager.add_button(
         "Q-Learning",
         14,
         action=lambda: threading.Thread(
-            target=train_q_learning).start(),
+            target=train_q_learning, args=(game_state,)
+        ).start(),
     )
 
     # Setup initial game state
