@@ -11,9 +11,7 @@ grid = np.array([[1, 1, 1, 1],
 
 def print_grid(grid, agent_pos):
     for r, row in enumerate(grid):
-        print(" ".join("A" if (r, c) == agent_pos else ("X" if cell == 0 else ("G" if cell == 2 else ".")) 
-                       for c, cell in enumerate(row))
-              )
+        print(" ".join("A" if (r, c) == agent_pos else ("X" if cell == 0 else ("G" if cell == 2 else ".")) for c, cell in enumerate(row)))
     print("\n")
 
 def main():
