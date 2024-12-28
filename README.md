@@ -77,7 +77,7 @@ The project allows users to:
 
 ## How to Run
 
-1.  Make sure you have Python 3.6+ installed along with `pygame`, `matplotlib`, `numpy`.
+1.  Make sure you have Python 3.6+ installed along with `pygame`, `matplotlib`, `numpy` by just running down.
 2.  Clone the repository.
 3.  Navigate to the project directory.
 4.  Run the `main.py` file using: `python main.py`.
