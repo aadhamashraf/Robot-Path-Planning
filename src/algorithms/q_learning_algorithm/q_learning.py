@@ -3,8 +3,6 @@ import random
 import matplotlib.pyplot as plt
 from src.utilities.constants import *
 
-# In src/algorithms/q_learning.py
-
 
 class QLearning:
     def __init__(self, size, alpha=0.7, gamma=0.95, epsilon_decay=0.0005, max_epsilon=1.0, min_epsilon=0.05):

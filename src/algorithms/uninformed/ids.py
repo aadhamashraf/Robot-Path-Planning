@@ -1,8 +1,6 @@
 from src.algorithms.base_search import BaseSearch
 from src.core.game_state import GameState
 
-# In src/algorithms/ids.py
-
 
 class IterativeDeepeningSearch(BaseSearch):
     def search(self, game_state: GameState):

@@ -1,4 +1,3 @@
-# In src/ui/button.py
 from src.utilities.constants import *
 
 

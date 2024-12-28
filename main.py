@@ -1,4 +1,3 @@
-# In src/main.py
 from src.algorithms.base_search import BaseSearch
 from src.core.game_state import GameState
 from src.core.algorithm_manager import AlgorithmManager
@@ -143,7 +142,8 @@ def main():
                 algorithm_name, algorithm_func, game_state
             )
         else:
-            algorithm_manager.solve_algorithm(algorithm_name, algorithm_func, *args)
+            algorithm_manager.solve_algorithm(
+                algorithm_name, algorithm_func, *args)
 
     # Function to create an instance of class and then pass the search to lambda function
     def create_algorithm_and_solve(algorithm_class, algorithm_name, *args):
@@ -240,7 +240,8 @@ def main():
     button_manager.add_button(
         "Hill Climbing",
         8,
-        action=create_algorithm_and_solve(hill_climbing.HillClimbing, "Hill Climbing"),
+        action=create_algorithm_and_solve(
+            hill_climbing.HillClimbing, "Hill Climbing"),
     )
     button_manager.add_button(
         "Simulated Annealing",
@@ -261,7 +262,8 @@ def main():
     button_manager.add_button(
         "Compare Algos",
         13,
-        action=lambda: showDifferences_ExecutionTime(algorithm_manager.compare_algos),
+        action=lambda: showDifferences_ExecutionTime(
+            algorithm_manager.compare_algos),
     )
 
     button_manager.add_button(
