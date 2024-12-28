@@ -1,3 +1,4 @@
+# In src/ui/button.py
 from src.utilities.constants import *
 
 
@@ -29,3 +30,6 @@ class Button:
     def click(self):
         if self.action:
             self.action()
+
+    def set_subtext(self, new_subtext):
+        self.subtext = str(new_subtext)

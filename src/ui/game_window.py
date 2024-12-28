@@ -1,18 +1,25 @@
+# In src/ui/game_window.py
+
 import pygame
 from src.core.metrics import Metrics
 import src.environment.mazeSetup as maze_setup
+import queue
+import matplotlib.pyplot as plt
 
 
 class GameWindow:
-    def __init__(self, screen_width, screen_height, button_manager, game_state, maze_setup):
+    def __init__(self, screen_width, screen_height, button_manager, game_state, maze_setup, plot_queue, plot_metrics_main_thread):
+        # Initialize pygame
+        pygame.init()
+        pygame.mixer.init()
+        pygame.font.init()  # Initialize the font module
         self.screen = pygame.display.set_mode((screen_width, screen_height))
         self.button_manager = button_manager
         self.game_state = game_state
         self.maze_setup = maze_setup
-
-        # Initialize pygame
-        pygame.init()
-        pygame.mixer.init()
+        self.font = pygame.font.Font(None, 24)  # Initialize font
+        self.plot_queue = plot_queue
+        self.plot_metrics_main_thread = plot_metrics_main_thread
         self._setup_audio()
 
     def _setup_audio(self):
@@ -29,6 +36,7 @@ class GameWindow:
         while running:
             running = self._handle_events()
             self._draw()
+            self._check_plot_queue()
 
     def _handle_events(self):
         for event in pygame.event.get():
@@ -47,5 +55,19 @@ class GameWindow:
             self.game_state.goal_pos,
             self.game_state.path
         )
+        self._draw_l_value()
         self.button_manager.draw_all(self.screen)
         pygame.display.flip()
+
+    def _draw_l_value(self):
+        l_text = self.font.render(
+            f"Explored Nodes: {self.game_state.l}", True, (0, 0, 0)  # Black
+        )
+        self.screen.blit(l_text, (10, 10))  # Adjust position as needed
+
+    def _check_plot_queue(self):
+        try:
+            reward_history, steps_history = self.plot_queue.get(block=False)
+            self.plot_metrics_main_thread(reward_history, steps_history)
+        except queue.Empty:
+            pass

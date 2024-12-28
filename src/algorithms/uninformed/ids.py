@@ -1,13 +1,16 @@
 from src.algorithms.base_search import BaseSearch
 from src.core.game_state import GameState
 
+# In src/algorithms/ids.py
+
 
 class IterativeDeepeningSearch(BaseSearch):
-    def search(self, game_state: GameState, depth_limit=1):
+    def search(self, game_state: GameState):
         self._start_timer()
         frontier = [self.start]
         parent = {self.start: None}
         l = game_state.l  # Get l value from gamestate
+        explored_states = []
 
         current = self.start
         while frontier and l > 0:
@@ -15,20 +18,19 @@ class IterativeDeepeningSearch(BaseSearch):
             self.counter += 1
 
             if current == self.goal:
-                return (
-                    self._reconstruct_path(parent, current),
-                    frontier,
-                    self.counter,
-                    self._get_elapsed_time(),
-                )
+                return self._reconstruct_path(parent, current), explored_states, self.counter, self._get_elapsed_time()
 
+            temp = []
             for dx, dy in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
                 nx, ny = current[0] + dx, current[1] + dy
                 if self._is_valid_position(nx, ny) and (nx, ny) not in parent:
                     parent[(nx, ny)] = current
                     frontier.append((nx, ny))
-            l -= 1
-        game_state.l += 1
+                    temp.append((nx, ny))
+
+            explored_states.append(temp)
+            l -= 5
+        game_state.l += 5
         return (
             self._reconstruct_path(parent, current),
             frontier,
@@ -37,9 +39,9 @@ class IterativeDeepeningSearch(BaseSearch):
         )
         return None, frontier, self.counter, self._get_elapsed_time()
 
-    def _reconstruct_path(self, parent, current):
+    def _reconstruct_path(self, came_from, current):
         path = []
-        while current != self.start:
+        while current in came_from:
             path.append(current)
-            current = parent[current]
+            current = came_from[current]
         return path[::-1]
