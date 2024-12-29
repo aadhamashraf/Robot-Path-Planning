@@ -78,7 +78,7 @@ The project allows users to:
 ## How to Run
 
 
-1.  Clone the repository `git clone https://github.com/aadhamashraf/AI-FL24-GP.git`.
+1.  Clone the repository `https://github.com/aadhamashraf/Robot-Path-Planning.git`.
 2.  Navigate to the project directory `cd <project-directory>`.
 3.  Ensure you have Python 3.6+ installed. Then, install the required libraries by running `pip install -r requirements.txt`
 4.  Run the `main.py` file using: `python main.py`.
