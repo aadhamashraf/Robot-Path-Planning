@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/c0925f4e-4f4c-4f5c-93b7-7794e069c228)
+![]([https://github.com/user-attachments/assets/c0925f4e-4f4c-4f5c-93b7-7794e069c228](https://github.com/aadhamashraf/Robot-Path-Planning/blob/main/Robot%20Path%20Navigation.gif))
 
 # AI Maze Solver Project
 
