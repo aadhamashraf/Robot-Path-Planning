@@ -69,7 +69,7 @@ This directory contains utility files.
 The project allows users to:
 
 *   Generate and visualize random mazes.
-*   Solve mazes using various pathfinding algorithms (BFS, DFS, UCS, IDS, Greedy BFS, A*, Hill Climbing, Simulated Annealing, Genetic Algorithm).
+*   Solve mazes using various pathfinding algorithms (BFS, DFS, UCS, IDS, Greedy BFS, A*, Hill Climbing, Simulated Annealing, Genetic Algorithm , Q-Learning Algorithm).
 *   View the solution path and see how the algorithms explore the maze.
 *   Compare the performance of different algorithms in terms of execution time and number of steps using a graph.
 *   Export the explored frontier of different algorithms.
