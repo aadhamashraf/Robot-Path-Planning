@@ -73,7 +73,7 @@ The project allows users to:
 *   View the solution path and see how the algorithms explore the maze.
 *   Compare the performance of different algorithms in terms of execution time and number of steps using a graph.
 *   Export the explored frontier of different algorithms.
-*   Reset the path, reset the maze, and modify level to explore with `IDS`
+*   Reset the path, reset the maze, and modify level to explore with `IDS`.
 
 ## How to Run
 
